@@ -35,22 +35,25 @@ public class Player {
         return heading;
     }
 
-    public void headNorth(int pos) {
+    public void headNorth(int posX, int posY) {
         heading = "N";
-        positionX = pos;
+        positionX = posX;
+        positionY = posY;
     }
-    public void headSouth(int pos) {
+    public void headSouth(int posX, int posY) {
         heading = "S";
-        positionX = pos;
+        positionX = posX;
+        positionY = posY;
     }
-    public void headEast(int pos) {
+    public void headEast(int posX, int posY) {
         heading = "E";
-        positionY = pos;
+        positionX = posX;
+        positionY = posY;
     }
-
-    public void headWest(int pos) {
+    public void headWest(int posX, int posY) {
         heading = "W";
-        positionY = pos;
+        positionX = posX;
+        positionY = posY;
     }
 
 

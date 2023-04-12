@@ -51,6 +51,25 @@ public class Game extends JFrame {
     }
 
     public void updatePlayer() {
+        int checkCol = (player.getPositionX() / CELL_SIZE);
+        int checkRow = (player.getPositionY() / CELL_SIZE);
+        if(checkCol == 0) {
+            player.headWest((mapWidth - 4) * CELL_SIZE, player.getPositionY());
+            return;
+        }
+        else if(checkCol == mapWidth - 3) {
+            player.headEast(CELL_SIZE, player.getPositionY());
+            return;
+        }
+        if(checkRow == 0) {
+            player.headNorth(player.getPositionX(), (mapHeight - 4) * CELL_SIZE);
+            return;
+        }
+        else if(checkRow == mapHeight - 3) {
+            player.headSouth(player.getPositionX(), CELL_SIZE);
+            return;
+        }
+
         if(player.getHeading().equals("N")) {
             int col = (int) (player.getPositionX() / CELL_SIZE);
             int row = (int) ((player.getPositionY() - base_speed) / CELL_SIZE);
@@ -123,7 +142,7 @@ public class Game extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     int result = checkPathNorth();
                     if(result != -1) {
-                        player.headNorth(result);
+                        player.headNorth(result, player.getPositionY());
                     }
                 }
             };
@@ -131,7 +150,7 @@ public class Game extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     int result = checkPathSouth();
                     if(result != -1) {
-                        player.headSouth(result);
+                        player.headSouth(result, player.getPositionY());
                     }
                 }
             };
@@ -139,7 +158,7 @@ public class Game extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     int result = checkPathEast();
                     if(result != -1) {
-                        player.headEast(result);
+                        player.headEast(player.getPositionX(), result);
                     }
                 }
             };
@@ -147,7 +166,7 @@ public class Game extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     int result = checkPathWest();
                     if(result != -1) {
-                        player.headWest(result);
+                        player.headWest(player.getPositionX(), result);
                     }
                 }
             };
