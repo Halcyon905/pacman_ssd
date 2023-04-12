@@ -84,6 +84,7 @@ public class Game extends JFrame {
 
     private class GridUI extends JPanel {
         private static final int PELLET_SIZE = 6;
+        private static final int TURNING_WINDOW = 3;
         private static final int PAC_PADDING = 3;
         private static final int PELLET_PADDING = 2;
         private HashMap<String, Image> imageDirection = new HashMap<String, Image>();
@@ -152,7 +153,7 @@ public class Game extends JFrame {
             int col = player.getPositionX() / CELL_SIZE;
             int row = player.getPositionY() / CELL_SIZE;
 
-            if(pacmanMap.getCell(row, col).isTurning() && (col + 1) * CELL_SIZE - 4 > player.getPositionX()) {
+            if(pacmanMap.getCell(row, col).isTurning() && (col + 1) * CELL_SIZE - TURNING_WINDOW > player.getPositionX()) {
                 return col * CELL_SIZE;
             }
             if(player.getHeading().equals("S")) {
@@ -164,7 +165,7 @@ public class Game extends JFrame {
             int col = player.getPositionX() / CELL_SIZE;
             int row = player.getPositionY() / CELL_SIZE;
 
-            if(pacmanMap.getCell(row, col).isTurning() && (col + 1) * CELL_SIZE - 4 > player.getPositionX()) {
+            if(pacmanMap.getCell(row, col).isTurning() && (col + 1) * CELL_SIZE - TURNING_WINDOW > player.getPositionX()) {
                 return col * CELL_SIZE;
             }
             if(player.getHeading().equals("N")) {
@@ -176,7 +177,7 @@ public class Game extends JFrame {
             int col = player.getPositionX() / CELL_SIZE;
             int row = player.getPositionY() / CELL_SIZE;
 
-            if(pacmanMap.getCell(row, col).isTurning() && (row + 1) * CELL_SIZE - 4 > player.getPositionY()) {
+            if(pacmanMap.getCell(row, col).isTurning() && (row + 1) * CELL_SIZE - TURNING_WINDOW > player.getPositionY()) {
                 return row * CELL_SIZE;
             }
             if(player.getHeading().equals("W")) {
@@ -188,7 +189,7 @@ public class Game extends JFrame {
             int col = player.getPositionX() / CELL_SIZE;
             int row = player.getPositionY() / CELL_SIZE;
 
-            if(pacmanMap.getCell(row, col).isTurning() && (row + 1) * CELL_SIZE - 4 > player.getPositionY()) {
+            if(pacmanMap.getCell(row, col).isTurning() && (row + 1) * CELL_SIZE - TURNING_WINDOW > player.getPositionY()) {
                 return row * CELL_SIZE;
             }
             if(player.getHeading().equals("E")) {
