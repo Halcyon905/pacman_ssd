@@ -13,6 +13,7 @@ public class Game extends JFrame {
     private int mapWidth = 55;
     private int lives = 3;
     private double base_speed = 3;
+    private boolean toggleAnimation = false;
 
     public Game() {
         pacmanMap = new Map(mapWidth, mapHeight);
@@ -30,8 +31,13 @@ public class Game extends JFrame {
             @Override
             public void run() {
                 super.run();
+                double timeStamp = System.currentTimeMillis();
                 while(true) {
                     updatePlayer();
+                    if(System.currentTimeMillis() - timeStamp >= 210) {
+                        timeStamp = System.currentTimeMillis();
+                        toggleAnimation = !toggleAnimation;
+                    }
                     repaint();
                     try {
                         sleep(42);
@@ -88,6 +94,7 @@ public class Game extends JFrame {
         private static final int PAC_PADDING = 3;
         private static final int PELLET_PADDING = 2;
         private HashMap<String, Image> imageDirection = new HashMap<String, Image>();
+        private Image imageClosed;
 
         public GridUI() {
             setPreferredSize(new Dimension(mapWidth * CELL_SIZE, mapHeight * CELL_SIZE));
@@ -95,6 +102,7 @@ public class Game extends JFrame {
             imageDirection.put("S", new ImageIcon("img/pacman_south.png").getImage());
             imageDirection.put("W", new ImageIcon("img/pacman_west.png").getImage());
             imageDirection.put("E", new ImageIcon("img/pacman_east.png").getImage());
+            imageClosed = new ImageIcon("img/pacman_closed.png").getImage();
 
             addMouseListener(new MouseAdapter() {
                                  @Override
@@ -205,12 +213,19 @@ public class Game extends JFrame {
                     paintCell(g, i, y);
                 }
             }
-            g.setColor(Color.red);
-            g.drawRect(player.getPositionX(), player.getPositionY(), CELL_SIZE * 3, CELL_SIZE * 3);
-            g.drawImage(imageDirection.get(player.getHeading()),
-                    player.getPositionX() + PAC_PADDING, player.getPositionY() + PAC_PADDING,
+//            g.setColor(Color.red);
+//            g.drawRect(player.getPositionX(), player.getPositionY(), CELL_SIZE * 3, CELL_SIZE * 3);
+
+            g.drawImage(getPacmanImage(), player.getPositionX() + PAC_PADDING, player.getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
+        }
+
+        public Image getPacmanImage() {
+            if(toggleAnimation) {
+                return imageDirection.get(player.getHeading());
+            }
+            return imageClosed;
         }
 
         public void paintCell(Graphics g, int row, int col) {
