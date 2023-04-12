@@ -84,7 +84,7 @@ public class Game extends JFrame {
 
     private class GridUI extends JPanel {
         private static final int PELLET_SIZE = 6;
-        private static final int TURNING_WINDOW = 3;
+        private static final double TURNING_WINDOW = 3.25;
         private static final int PAC_PADDING = 3;
         private static final int PELLET_PADDING = 2;
         private HashMap<String, Image> imageDirection = new HashMap<String, Image>();
