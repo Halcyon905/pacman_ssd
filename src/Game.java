@@ -164,6 +164,10 @@ public class Game extends JFrame {
             if(pacmanMap.getCell(row, col).isTurning() && (col + 1) * CELL_SIZE - TURNING_WINDOW > player.getPositionX()) {
                 return col * CELL_SIZE;
             }
+            else if(pacmanMap.getCell(row, col + 1).isTurning() &&
+                    col * CELL_SIZE < player.getPositionX()) {
+                return (col + 1) * CELL_SIZE;
+            }
             if(player.getHeading().equals("S")) {
                 return player.getPositionX();
             }
@@ -175,6 +179,10 @@ public class Game extends JFrame {
 
             if(pacmanMap.getCell(row, col).isTurning() && (col + 1) * CELL_SIZE - TURNING_WINDOW > player.getPositionX()) {
                 return col * CELL_SIZE;
+            }
+            else if(pacmanMap.getCell(row, col + 1).isTurning() &&
+                    col * CELL_SIZE < player.getPositionX()) {
+                return (col + 1) * CELL_SIZE;
             }
             if(player.getHeading().equals("N")) {
                 return player.getPositionX();
@@ -188,6 +196,10 @@ public class Game extends JFrame {
             if(pacmanMap.getCell(row, col).isTurning() && (row + 1) * CELL_SIZE - TURNING_WINDOW > player.getPositionY()) {
                 return row * CELL_SIZE;
             }
+            else if(pacmanMap.getCell(row + 1, col).isTurning() &&
+                    row * CELL_SIZE < player.getPositionY()) {
+                return (row + 1) * CELL_SIZE;
+            }
             if(player.getHeading().equals("W")) {
                 return player.getPositionY();
             }
@@ -199,6 +211,10 @@ public class Game extends JFrame {
 
             if(pacmanMap.getCell(row, col).isTurning() && (row + 1) * CELL_SIZE - TURNING_WINDOW > player.getPositionY()) {
                 return row * CELL_SIZE;
+            }
+            else if(pacmanMap.getCell(row + 1, col).isTurning() &&
+                    row * CELL_SIZE < player.getPositionY()) {
+                return (row + 1) * CELL_SIZE;
             }
             if(player.getHeading().equals("E")) {
                 return player.getPositionY();
