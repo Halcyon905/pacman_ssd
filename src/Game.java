@@ -176,7 +176,7 @@ public class Game extends JFrame {
             int col = player.getPositionX() / CELL_SIZE;
             int row = player.getPositionY() / CELL_SIZE;
 
-            if(pacmanMap.getCell(row, col).isTurning()) {
+            if(pacmanMap.getCell(row, col).isTurning() && (row + 1) * CELL_SIZE - 4 > player.getPositionY()) {
                 return row * CELL_SIZE;
             }
             if(player.getHeading().equals("W")) {
@@ -188,7 +188,7 @@ public class Game extends JFrame {
             int col = player.getPositionX() / CELL_SIZE;
             int row = player.getPositionY() / CELL_SIZE;
 
-            if(pacmanMap.getCell(row, col).isTurning()) {
+            if(pacmanMap.getCell(row, col).isTurning() && (row + 1) * CELL_SIZE - 4 > player.getPositionY()) {
                 return row * CELL_SIZE;
             }
             if(player.getHeading().equals("E")) {
