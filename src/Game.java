@@ -1,3 +1,5 @@
+import entity.Entity;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -7,7 +9,7 @@ public class Game extends JFrame {
     private static final int CELL_SIZE = 10;
 
     private Map pacmanMap;
-    private Player player;
+    private Entity player;
     private GridUI gridUI;
     private int mapHeight = 61;
     private int mapWidth = 55;
@@ -17,7 +19,7 @@ public class Game extends JFrame {
 
     public Game() {
         pacmanMap = new Map(mapWidth, mapHeight);
-        player = new Player(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed); //map1: 26, 45 / map2: 27, 29
+        player = new Entity(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed); //map1: 26, 45 / map2: 27, 29
         gridUI = new GridUI();
 
         add(gridUI);

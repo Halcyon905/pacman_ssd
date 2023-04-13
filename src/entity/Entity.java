@@ -1,6 +1,8 @@
+package entity;
+
 import java.util.HashMap;
 
-public class Player {
+public class Entity {
 
     private HashMap<String, int[]> direction = new HashMap<String, int[]>();
     private int positionX;
@@ -8,7 +10,7 @@ public class Player {
     private String heading = "E";
     private double speed;
 
-    public Player(int startX, int startY, double speed) {
+    public Entity(int startX, int startY, double speed) {
         int[] north = {-1, 0};
         direction.put("N", north);
         int[] south = {1, 0};
