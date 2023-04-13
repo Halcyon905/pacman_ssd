@@ -11,22 +11,29 @@ public class Game extends JFrame {
     private Map pacmanMap;
     private Entity player;
     private GridUI gridUI;
+    private PlayerInfo playerInfo;
     private int mapHeight = 61;
     private int mapWidth = 55;
     private int lives = 3;
+    private int score = 0;
     private double base_speed = 3;
     private boolean toggleAnimation = false;
 
     public Game() {
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(Color.BLACK);
+
         pacmanMap = new Map(mapWidth, mapHeight);
         player = new Entity(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed); //map1: 26, 45 / map2: 27, 29
         gridUI = new GridUI();
 
-        add(gridUI);
+        playerInfo = new PlayerInfo(lives);
+
+        add(playerInfo, BorderLayout.NORTH);
+        add(gridUI, BorderLayout.SOUTH);
         pack();
 
         setVisible(true);
-        setBackground(Color.black);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         Thread thread = new Thread() {
@@ -36,6 +43,7 @@ public class Game extends JFrame {
                 double timeStamp = System.currentTimeMillis();
                 while(true) {
                     updatePlayer();
+                    updateMap();
                     if(System.currentTimeMillis() - timeStamp >= 210) {
                         timeStamp = System.currentTimeMillis();
                         toggleAnimation = !toggleAnimation;
@@ -50,6 +58,19 @@ public class Game extends JFrame {
             }
         };
         thread.run();
+    }
+
+    public void updateMap() {
+        int pellet = pacmanMap.updateCell((player.getPositionY() / CELL_SIZE) + 1,
+                                        (player.getPositionX() / CELL_SIZE) + 1);
+        if(pellet == 1) {
+            score += 10;
+            playerInfo.updateScore(score);
+        }
+        else if(pellet == 2) {
+            score += 50;
+            playerInfo.updateScore(score);
+        }
     }
 
     public void updatePlayer() {
@@ -124,17 +145,6 @@ public class Game extends JFrame {
             imageDirection.put("W", new ImageIcon("img/pacman_west.png").getImage());
             imageDirection.put("E", new ImageIcon("img/pacman_east.png").getImage());
             imageClosed = new ImageIcon("img/pacman_closed.png").getImage();
-
-            addMouseListener(new MouseAdapter() {
-                                 @Override
-                                 public void mousePressed(MouseEvent e) {
-                                     super.mousePressed(e);
-
-                                     int row = e.getY() / CELL_SIZE;
-                                     int col = e.getX() / CELL_SIZE;
-                                     System.out.println(row + " " + col);
-                                 }
-                             });
 
             getInputMap().put(KeyStroke.getKeyStroke("W"), "w pressed");
             getInputMap().put(KeyStroke.getKeyStroke("A"), "a pressed");

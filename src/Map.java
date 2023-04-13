@@ -62,4 +62,11 @@ public class Map {
             ioe.printStackTrace();
         }
     }
+
+    public int updateCell(int row, int col) {
+        Cell target = getCell(row, col);
+        int result = target.getPellet();
+        target.eaten();
+        return result;
+    }
 }
