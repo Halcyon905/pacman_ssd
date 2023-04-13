@@ -17,7 +17,7 @@ public class Game extends JFrame {
 
     public Game() {
         pacmanMap = new Map(mapWidth, mapHeight);
-        player = new Player(27 * CELL_SIZE, 29 * CELL_SIZE, base_speed); //map1: 26, 45 / map2: 27, 29
+        player = new Player(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed); //map1: 26, 45 / map2: 27, 29
         gridUI = new GridUI();
 
         add(gridUI);

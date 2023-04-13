@@ -32,7 +32,7 @@ public class Map {
 
     private void setDefaultMap() {
         try {
-            FileReader fr = new FileReader(new File("src/map/pacman_map_2.csv"));
+            FileReader fr = new FileReader(new File("src/map/pacman_map.csv"));
             BufferedReader br = new BufferedReader(fr);
             String line = "";
             String[] tempArr;
