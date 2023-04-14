@@ -22,7 +22,10 @@ public class Game {
         CELL_SIZE = cellSize;
 
         pacmanMap = new Map(mapWidth, mapHeight);
-        player = new Entity(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed); //map1: 26, 45 / map2: 27, 29
+        player = new Entity(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed);
+        //map1: 26, 45
+        //map2: 26, 29
+        //map3: 26, 57
     }
 
     public Entity getPlayer() {
