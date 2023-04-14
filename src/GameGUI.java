@@ -78,7 +78,7 @@ public class GameGUI extends JFrame {
             getInputMap().put(KeyStroke.getKeyStroke("D"), "d pressed");
             Action moveNorth = new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
-                    int result = checkPathNorth();
+                    int result = checkPathYAxis();
                     if (result != -1) {
                         game.getPlayer().headNorth(result, game.getPlayer().getPositionY());
                     }
@@ -86,7 +86,7 @@ public class GameGUI extends JFrame {
             };
             Action moveSouth = new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
-                    int result = checkPathSouth();
+                    int result = checkPathYAxis();
                     if (result != -1) {
                         game.getPlayer().headSouth(result, game.getPlayer().getPositionY());
                     }
@@ -94,7 +94,7 @@ public class GameGUI extends JFrame {
             };
             Action moveEast = new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
-                    int result = checkPathEast();
+                    int result = checkPathXAxis();
                     if (result != -1) {
                         game.getPlayer().headEast(game.getPlayer().getPositionX(), result);
                     }
@@ -102,7 +102,7 @@ public class GameGUI extends JFrame {
             };
             Action moveWest = new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
-                    int result = checkPathWest();
+                    int result = checkPathXAxis();
                     if (result != -1) {
                         game.getPlayer().headWest(game.getPlayer().getPositionX(), result);
                     }
@@ -114,7 +114,7 @@ public class GameGUI extends JFrame {
             getActionMap().put("d pressed", moveEast);
         }
 
-        public int checkPathNorth() {
+        public int checkPathYAxis() {
             int col = game.getPlayer().getPositionX() / CELL_SIZE;
             int row = game.getPlayer().getPositionY() / CELL_SIZE;
 
@@ -124,29 +124,13 @@ public class GameGUI extends JFrame {
                     col * CELL_SIZE + TURNING_WINDOW < game.getPlayer().getPositionX()) {
                 return (col + 1) * CELL_SIZE;
             }
-            if (game.getPlayer().getHeading().equals("S")) {
+            if (game.getPlayer().getHeading().equals("S") || game.getPlayer().getHeading().equals("N")) {
                 return game.getPlayer().getPositionX();
             }
             return -1;
         }
 
-        public int checkPathSouth() {
-            int col = game.getPlayer().getPositionX() / CELL_SIZE;
-            int row = game.getPlayer().getPositionY() / CELL_SIZE;
-
-            if (game.getPacmanMap().getCell(row, col).isTurning() && (col + 1) * CELL_SIZE - TURNING_WINDOW > game.getPlayer().getPositionX()) {
-                return col * CELL_SIZE;
-            } else if (game.getPacmanMap().getCell(row, col + 1).isTurning() &&
-                    col * CELL_SIZE + TURNING_WINDOW < game.getPlayer().getPositionX()) {
-                return (col + 1) * CELL_SIZE;
-            }
-            if (game.getPlayer().getHeading().equals("N")) {
-                return game.getPlayer().getPositionX();
-            }
-            return -1;
-        }
-
-        public int checkPathEast() {
+        public int checkPathXAxis() {
             int col = game.getPlayer().getPositionX() / CELL_SIZE;
             int row = game.getPlayer().getPositionY() / CELL_SIZE;
 
@@ -156,23 +140,7 @@ public class GameGUI extends JFrame {
                     row * CELL_SIZE + TURNING_WINDOW < game.getPlayer().getPositionY()) {
                 return (row + 1) * CELL_SIZE;
             }
-            if (game.getPlayer().getHeading().equals("W")) {
-                return game.getPlayer().getPositionY();
-            }
-            return -1;
-        }
-
-        public int checkPathWest() {
-            int col = game.getPlayer().getPositionX() / CELL_SIZE;
-            int row = game.getPlayer().getPositionY() / CELL_SIZE;
-
-            if (game.getPacmanMap().getCell(row, col).isTurning() && (row + 1) * CELL_SIZE - TURNING_WINDOW > game.getPlayer().getPositionY()) {
-                return row * CELL_SIZE;
-            } else if (game.getPacmanMap().getCell(row + 1, col).isTurning() &&
-                    row * CELL_SIZE + TURNING_WINDOW < game.getPlayer().getPositionY()) {
-                return (row + 1) * CELL_SIZE;
-            }
-            if (game.getPlayer().getHeading().equals("E")) {
+            if (game.getPlayer().getHeading().equals("W") || game.getPlayer().getHeading().equals("E")) {
                 return game.getPlayer().getPositionY();
             }
             return -1;
