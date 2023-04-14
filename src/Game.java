@@ -196,7 +196,7 @@ public class Game extends JFrame {
                 return col * CELL_SIZE;
             }
             else if(pacmanMap.getCell(row, col + 1).isTurning() &&
-                    col * CELL_SIZE < player.getPositionX()) {
+                    col * CELL_SIZE + TURNING_WINDOW < player.getPositionX()) {
                 return (col + 1) * CELL_SIZE;
             }
             if(player.getHeading().equals("S")) {
@@ -212,7 +212,7 @@ public class Game extends JFrame {
                 return col * CELL_SIZE;
             }
             else if(pacmanMap.getCell(row, col + 1).isTurning() &&
-                    col * CELL_SIZE < player.getPositionX()) {
+                    col * CELL_SIZE + TURNING_WINDOW < player.getPositionX()) {
                 return (col + 1) * CELL_SIZE;
             }
             if(player.getHeading().equals("N")) {
@@ -228,7 +228,7 @@ public class Game extends JFrame {
                 return row * CELL_SIZE;
             }
             else if(pacmanMap.getCell(row + 1, col).isTurning() &&
-                    row * CELL_SIZE < player.getPositionY()) {
+                    row * CELL_SIZE + TURNING_WINDOW < player.getPositionY()) {
                 return (row + 1) * CELL_SIZE;
             }
             if(player.getHeading().equals("W")) {
@@ -244,7 +244,7 @@ public class Game extends JFrame {
                 return row * CELL_SIZE;
             }
             else if(pacmanMap.getCell(row + 1, col).isTurning() &&
-                    row * CELL_SIZE < player.getPositionY()) {
+                    row * CELL_SIZE + TURNING_WINDOW < player.getPositionY()) {
                 return (row + 1) * CELL_SIZE;
             }
             if(player.getHeading().equals("E")) {
@@ -284,11 +284,11 @@ public class Game extends JFrame {
                 g.setColor(Color.blue);
                 g.drawRect(x, y, CELL_SIZE, CELL_SIZE);
             }
-            else if(cell.getPellet() == 1) {
+            else if(cell.isPelletStatus() && cell.getPellet() == 1) {
                 g.setColor(Color.white);
                 g.fillOval(x + PELLET_PADDING, y + PELLET_PADDING, PELLET_SIZE, PELLET_SIZE);
             }
-            else if(cell.getPellet() == 2) {
+            else if(cell.isPelletStatus() && cell.getPellet() == 2) {
                 g.setColor(Color.white);
                 g.fillOval(x + PELLET_PADDING - 3, y + PELLET_PADDING - 3, PELLET_SIZE + 3, PELLET_SIZE + 3);
             }

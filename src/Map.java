@@ -65,8 +65,11 @@ public class Map {
 
     public int updateCell(int row, int col) {
         Cell target = getCell(row, col);
-        int result = target.getPellet();
-        target.eaten();
+        int result = 0;
+        if (target.isPelletStatus()) {
+            result = target.getPellet();
+            target.eaten();
+        }
         return result;
     }
 

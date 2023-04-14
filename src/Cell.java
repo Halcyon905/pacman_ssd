@@ -19,6 +19,10 @@ public class Cell {
         return pellet;
     }
 
+    public boolean isPelletStatus() {
+        return pelletStatus;
+    }
+
     public boolean isTurning() {
         return turning;
     }
