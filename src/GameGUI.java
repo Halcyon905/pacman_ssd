@@ -11,8 +11,8 @@ public class GameGUI extends JFrame {
     private int mapHeight = 61;
     private int mapWidth = 55;
     private boolean toggleAnimation = false;
-
     private Game game;
+    private int gameState = 0;
     private GridUI gridUI;
     private PlayerInfo playerInfo;
 
@@ -23,39 +23,70 @@ public class GameGUI extends JFrame {
         game = new Game(CELL_SIZE);
 
         gridUI = new GridUI();
-        playerInfo = new PlayerInfo(game.getLives());
-
-        add(playerInfo, BorderLayout.NORTH);
-        add(gridUI, BorderLayout.SOUTH);
-        pack();
+        playerInfo = new PlayerInfo(game.getLives(), mapWidth * CELL_SIZE);
 
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                double timeStamp = System.currentTimeMillis();
-                while(true) {
-                    game.update();
-                    playerInfo.updateScore(game.getScore());
-                    playerInfo.updateLives(game.getLives());
-                    if(System.currentTimeMillis() - timeStamp >= 210) {
-                        timeStamp = System.currentTimeMillis();
-                        toggleAnimation = !toggleAnimation;
+        startGame();
+    }
+
+    public void startGame() {
+        add(playerInfo, BorderLayout.NORTH);
+        add(gridUI, BorderLayout.SOUTH);
+        pack();
+
+        game.getPacmanMap().setDefaultMap("src/mapLayout/pacman_map.csv");
+
+        while(true) {
+            Thread gameThread = new Thread() {
+                @Override
+                public void run() {
+                    super.run();
+                    double timeStamp = System.currentTimeMillis();
+                    gameState = 1;
+
+                    for(int i = 3; i > 0; i--) {
+                        try {
+                            playerInfo.updateScore(i);
+                            sleep(1000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
-                    repaint();
-                    try {
-                        sleep(42);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+
+                    gridUI.requestFocus();
+
+                    while(true) {
+                        game.update();
+                        playerInfo.updateScore(game.getScore());
+                        playerInfo.updateLives(game.getLives());
+                        if(System.currentTimeMillis() - timeStamp >= 210) {
+                            timeStamp = System.currentTimeMillis();
+                            toggleAnimation = !toggleAnimation;
+                        }
+                        repaint();
+                        if(game.checkWin()) {
+                            gameState = 2;
+                            break;
+                        }
+                        try {
+                            sleep(42);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
+            };
+            gameThread.run();
+            if(gameState == 3) {
+                break;
             }
-        };
-        thread.run();
+            game.reset();
+            playerInfo.requestFocus();
+        }
     }
+
     private class GridUI extends JPanel {
         private static final int PELLET_SIZE = 6;
         private static final double TURNING_WINDOW = 3.25;

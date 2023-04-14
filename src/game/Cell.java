@@ -57,4 +57,11 @@ public class Cell {
         wall = true;
         pellet = 0;
     }
+
+    public void setEmpty() {
+        wall = false;
+        turning = false;
+        pelletStatus = false;
+        pellet = 0;
+    }
 }

@@ -4,12 +4,14 @@ import java.awt.*;
 public class PlayerInfo extends JPanel {
     private JLabel score;
     private JLabel lives;
-    private Font font = new Font("TimesRoman", Font.PLAIN, 15);
+    private int fontSize = 15;
+    private Font font = new Font("TimesRoman", Font.PLAIN, fontSize);
     private Color fontColor = Color.white;
 
-    public PlayerInfo(int startingLives) {
+    public PlayerInfo(int startingLives, int width) {
         setLayout(new FlowLayout());
         setBackground(Color.BLACK);
+        setPreferredSize(new Dimension(width, fontSize * 2));
 
         lives = new JLabel("Lives: " + startingLives);
         lives.setFont(font);

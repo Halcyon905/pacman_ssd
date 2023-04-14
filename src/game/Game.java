@@ -11,6 +11,9 @@ public class Game {
     private int mapWidth = 55;
     private int lives = 3;
     private int score = 0;
+    private int startX = 26;
+    private int startY = 45;
+
     private double base_speed = 3;
     private boolean toggleAnimation = false;
 
@@ -33,6 +36,9 @@ public class Game {
     public int getScore() {
         return score;
     }
+    public void clearScore() {
+        score = 0;
+    }
 
     public void update() {
         updateMap();
@@ -48,6 +54,15 @@ public class Game {
         else if(pellet == 2) {
             score += 50;
         }
+    }
+
+    public boolean checkWin() {
+        return pacmanMap.checkPelletOnMap();
+    }
+
+    public void reset(){
+        pacmanMap.replaceAllPellet();
+        player.headWest(startX * CELL_SIZE, startY * CELL_SIZE);
     }
 
     public void updatePlayer() {

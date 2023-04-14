@@ -7,7 +7,7 @@ public class Entity {
     private HashMap<String, int[]> direction = new HashMap<String, int[]>();
     private int positionX;
     private int positionY;
-    private String heading = "E";
+    private String heading;
     private double speed;
 
     public Entity(int startX, int startY, double speed) {
@@ -22,6 +22,9 @@ public class Entity {
 
         positionX = startX;
         positionY = startY;
+
+        headWest(startX, startY);
+
         this.speed = speed;
     }
 
