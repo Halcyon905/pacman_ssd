@@ -1,3 +1,7 @@
+package game;
+
+import game.Cell;
+
 import java.io.*;
 
 public class Map {
@@ -32,7 +36,7 @@ public class Map {
 
     private void setDefaultMap() {
         try {
-            FileReader fr = new FileReader(new File("src/map/pacman_map.csv"));
+            FileReader fr = new FileReader(new File("src/mapLayout/pacman_map.csv"));
             BufferedReader br = new BufferedReader(fr);
             String line = "";
             String[] tempArr;

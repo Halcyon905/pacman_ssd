@@ -1,3 +1,5 @@
+package game;
+
 public class Cell {
     private boolean wall;
     private int pellet;

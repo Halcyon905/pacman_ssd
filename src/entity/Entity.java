@@ -57,8 +57,6 @@ public class Entity {
         positionX = posX;
         positionY = posY;
     }
-
-
     public void move() {
         int[] movement = direction.get(heading);
         positionY += movement[0] * speed;
