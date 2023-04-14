@@ -1,12 +1,13 @@
 public class Cell {
     private boolean wall;
     private int pellet;
-
+    private boolean pelletStatus;
     private boolean turning;
 
     public Cell() {
         wall = false;
         turning = false;
+        pelletStatus = false;
         pellet = 0;
     }
 
@@ -23,19 +24,27 @@ public class Cell {
     }
 
     public void eaten() {
-        if(pellet != 0) {
-            pellet = 0;
+        if(pelletStatus) {
+            pelletStatus = false;
         }
     }
 
-    public void setTurning() { turning = true; }
+    public void resetPellet() {
+        pelletStatus = true;
+    }
+
+    public void setTurning() {
+        turning = true;
+    }
 
     public void setPellet() {
         pellet = 1;
+        pelletStatus = true;
     }
 
     public void setPowerPellet() {
         pellet = 2;
+        pelletStatus = true;
     }
 
     public void buildWall() {

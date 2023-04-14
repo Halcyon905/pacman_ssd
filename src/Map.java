@@ -69,4 +69,16 @@ public class Map {
         target.eaten();
         return result;
     }
+
+    public void replacePellet() {
+        Cell cell;
+        for(int row = 0; row < height; row++) {
+            for(int col = 0; col < width; col++) {
+                cell = getCell(row, col);
+                if(cell.getPellet() > 0) {
+                    cell.resetPellet();
+                }
+            }
+        }
+    }
 }
