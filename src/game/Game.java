@@ -2,11 +2,6 @@ package game;
 
 import entity.Entity;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.HashMap;
-
 public class Game {
     private static int CELL_SIZE;
 

@@ -1,7 +1,4 @@
 package game;
-
-import game.Cell;
-
 import java.io.*;
 
 public class Map {
