@@ -12,7 +12,6 @@ public class GameGUI extends JFrame {
     private int mapWidth = 55;
     private boolean toggleAnimation = false;
     private Game game;
-    private int gameState = 0;
     private GridUI gridUI;
     private PlayerInfo playerInfo;
 
@@ -44,7 +43,8 @@ public class GameGUI extends JFrame {
                 public void run() {
                     super.run();
                     double timeStamp = System.currentTimeMillis();
-                    gameState = 1;
+                    toggleAnimation = false;
+                    game.start();
 
                     for(int i = 3; i > 0; i--) {
                         try {
@@ -54,7 +54,6 @@ public class GameGUI extends JFrame {
                             throw new RuntimeException(e);
                         }
                     }
-
                     gridUI.requestFocus();
 
                     while(true) {
@@ -66,8 +65,7 @@ public class GameGUI extends JFrame {
                             toggleAnimation = !toggleAnimation;
                         }
                         repaint();
-                        if(game.checkWin()) {
-                            gameState = 2;
+                        if(game.getGameState() == 2 || game.getGameState() == 3) {
                             break;
                         }
                         try {
@@ -79,7 +77,7 @@ public class GameGUI extends JFrame {
                 }
             };
             gameThread.run();
-            if(gameState == 3) {
+            if(game.getGameState() == 3) {
                 break;
             }
             game.reset();
