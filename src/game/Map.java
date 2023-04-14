@@ -1,3 +1,4 @@
+package game;
 import java.io.*;
 
 public class Map {
@@ -12,7 +13,6 @@ public class Map {
         cellArray = new Cell[height][width];
 
         initCells();
-        setDefaultMap();
     }
 
     public Cell getCell(int row, int col) {
@@ -30,9 +30,9 @@ public class Map {
         }
     }
 
-    private void setDefaultMap() {
+    public void setDefaultMap(String filePath) {
         try {
-            FileReader fr = new FileReader(new File("src/map/pacman_map.csv"));
+            FileReader fr = new FileReader(new File(filePath));
             BufferedReader br = new BufferedReader(fr);
             String line = "";
             String[] tempArr;
@@ -53,6 +53,9 @@ public class Map {
                     else if(tempStr.equals("4")) {
                         cellArray[row][col].setTurning();
                     }
+                    else {
+                        cellArray[row][col].setEmpty();
+                    }
                     col++;
                 }
                 row++;
@@ -60,6 +63,41 @@ public class Map {
             br.close();
         } catch(IOException ioe) {
             ioe.printStackTrace();
+        }
+    }
+
+    public int updateCell(int row, int col) {
+        Cell target = getCell(row, col);
+        int result = 0;
+        if (target.isPelletStatus()) {
+            result = target.getPellet();
+            target.eaten();
+        }
+        return result;
+    }
+
+    public boolean checkPelletOnMap() {
+        Cell cell;
+        for(int row = 0; row < height; row++) {
+            for(int col = 0; col < width; col++) {
+                cell = getCell(row, col);
+                if(cell.getPellet() > 0 && cell.isPelletStatus()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void replaceAllPellet() {
+        Cell cell;
+        for(int row = 0; row < height; row++) {
+            for(int col = 0; col < width; col++) {
+                cell = getCell(row, col);
+                if(cell.getPellet() > 0) {
+                    cell.resetPellet();
+                }
+            }
         }
     }
 }
