@@ -7,6 +7,8 @@ public class Game {
 
     private Map pacmanMap;
     private Entity player;
+    private Entity blinky;
+    private BlinkyAI blinkyAI;
     private int mapHeight = 61;
     private int mapWidth = 55;
     private int lives = 3;
@@ -23,6 +25,8 @@ public class Game {
 
         pacmanMap = new Map(mapWidth, mapHeight);
         player = new Entity(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed); //map1: 26, 45 / map2: 27, 29
+        blinky = new Entity(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed);
+        blinkyAI = new BlinkyAI();
     }
 
     public Entity getPlayer() {
@@ -31,6 +35,7 @@ public class Game {
     public Map getPacmanMap() {
         return pacmanMap;
     }
+    public Entity getBlinky() { return blinky; }
     public int getLives() {
         return lives;
     }
@@ -40,6 +45,7 @@ public class Game {
     public int getGameState() {
         return gameState;
     }
+    public int getCellSize() {return CELL_SIZE; }
 
     public void start() {
         gameState = 1;
@@ -52,6 +58,7 @@ public class Game {
     public void update() {
         updateMap();
         updatePlayer();
+        updateBlinky();
         if(pacmanMap.checkPelletOnMap()) {
             gameState = 2;
         }
@@ -72,6 +79,19 @@ public class Game {
         pacmanMap.replaceAllPellet();
         player.headWest(startX * CELL_SIZE, startY * CELL_SIZE);
         gameState = 0;
+    }
+
+    public void updateBlinky() {
+        String nextMove = blinkyAI.getNextMove(getBlinky(), getPlayer(), this);
+        if (nextMove != null) {
+            switch (nextMove) {
+                case "N" -> getBlinky().headNorth(getBlinky().getPositionX(), getBlinky().getPositionY());
+                case "S" -> getBlinky().headSouth(getBlinky().getPositionX(), getBlinky().getPositionY());
+                case "E" -> getBlinky().headEast(getBlinky().getPositionX(), getBlinky().getPositionY());
+                case "W" -> getBlinky().headWest(getBlinky().getPositionX(), getBlinky().getPositionY());
+            }
+            getBlinky().move();
+        }
     }
 
     public void updatePlayer() {

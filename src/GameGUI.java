@@ -1,6 +1,5 @@
 import game.Cell;
 import game.Game;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -92,6 +91,7 @@ public class GameGUI extends JFrame {
         private static final int PELLET_PADDING = 2;
         private HashMap<String, Image> imageDirection = new HashMap<String, Image>();
         private Image imageClosed;
+        private Image blinkyImage;
 
         public GridUI() {
             setPreferredSize(new Dimension(mapWidth * CELL_SIZE, mapHeight * CELL_SIZE));
@@ -100,6 +100,8 @@ public class GameGUI extends JFrame {
             imageDirection.put("W", new ImageIcon("img/pacman_west.png").getImage());
             imageDirection.put("E", new ImageIcon("img/pacman_east.png").getImage());
             imageClosed = new ImageIcon("img/pacman_closed.png").getImage();
+
+            blinkyImage = new ImageIcon("img/blinky.png").getImage();
 
             getInputMap().put(KeyStroke.getKeyStroke("W"), "w pressed");
             getInputMap().put(KeyStroke.getKeyStroke("A"), "a pressed");
@@ -186,6 +188,9 @@ public class GameGUI extends JFrame {
 //            g.drawRect(game.getPlayer().getPositionX(), game.getPlayer().getPositionY(), CELL_SIZE * 3, CELL_SIZE * 3);
 
             g.drawImage(getPacmanImage(), game.getPlayer().getPositionX() + PAC_PADDING, game.getPlayer().getPositionY() + PAC_PADDING,
+                    (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
+                    null, null);
+            g.drawImage(blinkyImage, game.getBlinky().getPositionX() + PAC_PADDING, game.getBlinky().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
         }
