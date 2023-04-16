@@ -4,6 +4,15 @@ import java.io.*;
 public class Map {
 
     private Cell[][] cellArray;
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     private int width;
     private int height;
 

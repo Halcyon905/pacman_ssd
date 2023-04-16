@@ -110,6 +110,7 @@ public class GameGUI extends JFrame {
             Action moveNorth = new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
                     int result = checkPathYAxis();
+                    // System.out.println("check path y axis");
                     if (result != -1) {
                         game.getPlayer().headNorth(result, game.getPlayer().getPositionY());
                     }
@@ -146,6 +147,8 @@ public class GameGUI extends JFrame {
         }
 
         public int checkPathYAxis() {
+            // checks if the player is close to a turning point,
+            // where the player can change direction from moving horizontally to vertically.
             int col = game.getPlayer().getPositionX() / CELL_SIZE;
             int row = game.getPlayer().getPositionY() / CELL_SIZE;
 
@@ -158,10 +161,13 @@ public class GameGUI extends JFrame {
             if (game.getPlayer().getHeading().equals("S") || game.getPlayer().getHeading().equals("N")) {
                 return game.getPlayer().getPositionX();
             }
+            // if player is not close to the turning point and currently heading west or east
             return -1;
         }
 
         public int checkPathXAxis() {
+            // checks if the player is close to a turning point,
+            // where the player can change direction from moving vertically to horizontally
             int col = game.getPlayer().getPositionX() / CELL_SIZE;
             int row = game.getPlayer().getPositionY() / CELL_SIZE;
 
