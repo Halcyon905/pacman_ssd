@@ -31,7 +31,7 @@ public class Game {
         pacmanMap = new Map(mapWidth, mapHeight);
         player = new Entity(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed); //map1: 26, 45 / map2: 27, 29
         blinky = new Entity(11 * CELL_SIZE, 15 * CELL_SIZE, ghost_base_speed);
-        clyde = new Entity(26 * CELL_SIZE, 15 * CELL_SIZE, ghost_base_speed);
+        clyde = new Entity(26 * CELL_SIZE, 9 * CELL_SIZE, ghost_base_speed);
         ghostAI.put(blinky, new BlinkyAI());
         ghostAI.put(clyde, new ClydeAI());
     }
@@ -91,29 +91,34 @@ public class Game {
     }
 
     public void updateGhost(Entity ghost) {
-        String nextMove = ghostAI.get(ghost).getNextMove(ghost, getPlayer(), this);
-        // allow ghost to turn his head only in valid turning point
-        if (nextMove.equals("N")) {
-            int result = checkPathYAxisForGhost(ghost);
-            if (result != -1){
-                ghost.headNorth(result, ghost.getPositionY());
-            }
-        } else if (nextMove.equals("S")) {
-            int result = checkPathYAxisForGhost(ghost);
-            if (result != -1){
-                ghost.headSouth(result, ghost.getPositionY());
-            }
-        } else if (nextMove.equals("E")) {
-            int result = checkPathXAxisForGhost(ghost);
-            if (result != -1){
-                ghost.headEast(ghost.getPositionX(), result);
-            }
-        } else if (nextMove.equals("W")) {
-            int result = checkPathXAxisForGhost(ghost);
-            if (result != -1){
-                ghost.headWest(ghost.getPositionX(), result);
+        if (pacmanMap.getCell(
+                ghost.getPositionY() / CELL_SIZE,
+                ghost.getPositionX() / CELL_SIZE).isTurning()){
+            String nextMove = ghostAI.get(ghost).getNextMove(ghost, getPlayer(), this);
+            // allow ghost to turn his head only in valid turning point
+            if (nextMove.equals("N")) {
+                int result = checkPathYAxisForGhost(ghost);
+                if (result != -1){
+                    ghost.headNorth(result, ghost.getPositionY());
+                }
+            } else if (nextMove.equals("S")) {
+                int result = checkPathYAxisForGhost(ghost);
+                if (result != -1){
+                    ghost.headSouth(result, ghost.getPositionY());
+                }
+            } else if (nextMove.equals("E")) {
+                int result = checkPathXAxisForGhost(ghost);
+                if (result != -1){
+                    ghost.headEast(ghost.getPositionX(), result);
+                }
+            } else if (nextMove.equals("W")) {
+                int result = checkPathXAxisForGhost(ghost);
+                if (result != -1){
+                    ghost.headWest(ghost.getPositionX(), result);
+                }
             }
         }
+
         int checkCol = (ghost.getPositionX() / CELL_SIZE);
         int checkRow = (ghost.getPositionY() / CELL_SIZE);
         // manage pacman entering a teleporting gate
