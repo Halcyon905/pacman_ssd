@@ -21,8 +21,8 @@ public class Game {
     private int startX = 26;
     private int startY = 45;
 
-    private double base_speed = 3;
-    private double ghost_base_speed = 2;
+    private double base_speed = 5;
+    private double ghost_base_speed = 5;
     private boolean toggleAnimation = false;
 
     public Game(int cellSize) {
@@ -30,7 +30,7 @@ public class Game {
 
         pacmanMap = new Map(mapWidth, mapHeight);
         player = new Entity(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed); //map1: 26, 45 / map2: 27, 29
-        blinky = new Entity(11 * CELL_SIZE, 15 * CELL_SIZE, ghost_base_speed);
+        blinky = new Entity(11 * CELL_SIZE, 27 * CELL_SIZE, ghost_base_speed);
         clyde = new Entity(26 * CELL_SIZE, 9 * CELL_SIZE, ghost_base_speed);
         ghostAI.put(blinky, new BlinkyAI());
         ghostAI.put(clyde, new ClydeAI());

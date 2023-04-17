@@ -73,6 +73,13 @@ public class Map {
         } catch(IOException ioe) {
             ioe.printStackTrace();
         }
+        for(int row = 0; row < height; row++) {
+            for(int col = 0; col < width; col++) {
+                Cell cell = getCell(row, col);
+                if (cell.getWall()){
+                }
+            }
+        }
     }
 
     public int updateCell(int row, int col) {
