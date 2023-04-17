@@ -92,6 +92,7 @@ public class GameGUI extends JFrame {
         private HashMap<String, Image> imageDirection = new HashMap<String, Image>();
         private Image imageClosed;
         private Image blinkyImage;
+        private Image clydeImage;
 
         public GridUI() {
             setPreferredSize(new Dimension(mapWidth * CELL_SIZE, mapHeight * CELL_SIZE));
@@ -102,6 +103,7 @@ public class GameGUI extends JFrame {
             imageClosed = new ImageIcon("img/pacman_closed.png").getImage();
 
             blinkyImage = new ImageIcon("img/blinky.png").getImage();
+            clydeImage = new  ImageIcon("img/clyde.png").getImage();
 
             getInputMap().put(KeyStroke.getKeyStroke("W"), "w pressed");
             getInputMap().put(KeyStroke.getKeyStroke("A"), "a pressed");
@@ -197,6 +199,9 @@ public class GameGUI extends JFrame {
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
             g.drawImage(blinkyImage, game.getBlinky().getPositionX() + PAC_PADDING, game.getBlinky().getPositionY() + PAC_PADDING,
+                    (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
+                    null, null);
+            g.drawImage(clydeImage, game.getClyde().getPositionX() + PAC_PADDING, game.getClyde().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
         }

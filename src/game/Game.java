@@ -2,13 +2,17 @@ package game;
 
 import entity.Entity;
 
+import java.awt.*;
+import java.util.HashMap;
+
 public class Game {
     private static int CELL_SIZE;
 
     private Map pacmanMap;
     private Entity player;
     private Entity blinky;
-    private BlinkyAI blinkyAI;
+    private Entity clyde;
+    private HashMap<Entity, AI> ghostAI = new HashMap<Entity, AI>();
     private int mapHeight = 61;
     private int mapWidth = 55;
     private int lives = 3;
@@ -27,7 +31,9 @@ public class Game {
         pacmanMap = new Map(mapWidth, mapHeight);
         player = new Entity(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed); //map1: 26, 45 / map2: 27, 29
         blinky = new Entity(11 * CELL_SIZE, 15 * CELL_SIZE, ghost_base_speed);
-        blinkyAI = new BlinkyAI();
+        clyde = new Entity(26 * CELL_SIZE, 15 * CELL_SIZE, ghost_base_speed);
+        ghostAI.put(blinky, new BlinkyAI());
+        ghostAI.put(clyde, new ClydeAI());
     }
 
     public Entity getPlayer() {
@@ -37,6 +43,7 @@ public class Game {
         return pacmanMap;
     }
     public Entity getBlinky() { return blinky; }
+    public Entity getClyde() {return clyde; }
     public int getLives() {
         return lives;
     }
@@ -59,7 +66,8 @@ public class Game {
     public void update() {
         updateMap();
         updatePlayer();
-        updateBlinky();
+        updateGhost(blinky);
+        updateGhost(clyde);
         if(pacmanMap.checkPelletOnMap()) {
             gameState = 2;
         }
@@ -82,128 +90,128 @@ public class Game {
         gameState = 0;
     }
 
-    public void updateBlinky() {
-        String nextMove = blinkyAI.getNextMove(getBlinky(), getPlayer(), this);
+    public void updateGhost(Entity ghost) {
+        String nextMove = ghostAI.get(ghost).getNextMove(ghost, getPlayer(), this);
         // allow ghost to turn his head only in valid turning point
         if (nextMove.equals("N")) {
-            int result = checkPathYAxisForGhost();
+            int result = checkPathYAxisForGhost(ghost);
             if (result != -1){
-                getBlinky().headNorth(result, getBlinky().getPositionY());
+                ghost.headNorth(result, ghost.getPositionY());
             }
         } else if (nextMove.equals("S")) {
-            int result = checkPathYAxisForGhost();
+            int result = checkPathYAxisForGhost(ghost);
             if (result != -1){
-                getBlinky().headSouth(result, getBlinky().getPositionY());
+                ghost.headSouth(result, ghost.getPositionY());
             }
         } else if (nextMove.equals("E")) {
-            int result = checkPathXAxisForGhost();
+            int result = checkPathXAxisForGhost(ghost);
             if (result != -1){
-                getBlinky().headEast(getBlinky().getPositionX(), result);
+                ghost.headEast(ghost.getPositionX(), result);
             }
         } else if (nextMove.equals("W")) {
-            int result = checkPathXAxisForGhost();
+            int result = checkPathXAxisForGhost(ghost);
             if (result != -1){
-                getBlinky().headWest(getBlinky().getPositionX(), result);
+                ghost.headWest(ghost.getPositionX(), result);
             }
         }
-        int checkCol = (getBlinky().getPositionX() / CELL_SIZE);
-        int checkRow = (getBlinky().getPositionY() / CELL_SIZE);
+        int checkCol = (ghost.getPositionX() / CELL_SIZE);
+        int checkRow = (ghost.getPositionY() / CELL_SIZE);
         // manage pacman entering a teleporting gate
         // if player is on left edge, move player to the right edge facing leftward
         if(checkCol == 0) {
-            getBlinky().headWest((mapWidth - 4) * CELL_SIZE, getBlinky().getPositionY());
+            ghost.headWest((mapWidth - 4) * CELL_SIZE, ghost.getPositionY());
             return;
         }
         // if player is on right edge, move player to the right edge facing rightward
         else if(checkCol == mapWidth - 3) {
-            getBlinky().headEast(CELL_SIZE, getBlinky().getPositionY());
+            ghost.headEast(CELL_SIZE, ghost.getPositionY());
             return;
         }
         // if player is on the top edge (gate), move player to the bottom edge facing upward
         if(checkRow == 0) {
-            getBlinky().headNorth(getBlinky().getPositionX(), (mapHeight - 4) * CELL_SIZE);
+            ghost.headNorth(ghost.getPositionX(), (mapHeight - 4) * CELL_SIZE);
             return;
         }
         // if player is on the bottom edge (gate), move player to the top edge facing downward
         else if(checkRow == mapHeight - 3) {
-            getBlinky().headSouth(getBlinky().getPositionX(), CELL_SIZE);
+            ghost.headSouth(ghost.getPositionX(), CELL_SIZE);
             return;
         }
 
         // preventing the ghost from moving through the walls
-        if(getBlinky().getHeading().equals("N")) {
-            int col = (int) (getBlinky().getPositionX() / CELL_SIZE);
-            int row = (int) ((getBlinky().getPositionY() - ghost_base_speed) / CELL_SIZE);
+        if(ghost.getHeading().equals("N")) {
+            int col = (int) (ghost.getPositionX() / CELL_SIZE);
+            int row = (int) ((ghost.getPositionY() - ghost_base_speed) / CELL_SIZE);
             if (!pacmanMap.getCell(row, col).getWall() &&
                     !pacmanMap.getCell(row, col + 2).getWall()) {
-                getBlinky().move();
+                ghost.move();
             }
             return;
         }
-        if(getBlinky().getHeading().equals("S")) {
-            int col = (int) (getBlinky().getPositionX() / CELL_SIZE);
-            int row = (int) ((getBlinky().getPositionY() + (CELL_SIZE * 3)) / CELL_SIZE);
+        if(ghost.getHeading().equals("S")) {
+            int col = (int) (ghost.getPositionX() / CELL_SIZE);
+            int row = (int) ((ghost.getPositionY() + (CELL_SIZE * 3)) / CELL_SIZE);
             if (!pacmanMap.getCell(row, col).getWall() &&
                     !pacmanMap.getCell(row, col + 2).getWall()) {
-                getBlinky().move();
+                ghost.move();
             }
             return;
         }
-        if(getBlinky().getHeading().equals("E")) {
-            int col = (int) ((getBlinky().getPositionX() + (CELL_SIZE * 3)) / CELL_SIZE);
-            int row = (int) (getBlinky().getPositionY() / CELL_SIZE);
+        if(ghost.getHeading().equals("E")) {
+            int col = (int) ((ghost.getPositionX() + (CELL_SIZE * 3)) / CELL_SIZE);
+            int row = (int) (ghost.getPositionY() / CELL_SIZE);
             if (!pacmanMap.getCell(row, col).getWall() &&
                     // checking for right edge or right teleporting gate
                     !pacmanMap.getCell(row + 2, col).getWall()) {
-                getBlinky().move();
+                ghost.move();
             }
             return;
         }
-        if(getBlinky().getHeading().equals("W")) {
-            int col = (int) ((getBlinky().getPositionX() - ghost_base_speed) / CELL_SIZE);
-            int row = (int) (getBlinky().getPositionY() / CELL_SIZE);
+        if(ghost.getHeading().equals("W")) {
+            int col = (int) ((ghost.getPositionX() - ghost_base_speed) / CELL_SIZE);
+            int row = (int) (ghost.getPositionY() / CELL_SIZE);
             if (!pacmanMap.getCell(row, col).getWall() &&
                     !pacmanMap.getCell(row + 2, col).getWall()) {
-                getBlinky().move();
+                ghost.move();
             }
         }
     }
 
-    public int checkPathYAxisForGhost() {
+    public int checkPathYAxisForGhost(Entity ghost) {
         // checks if the ghost is close to a turning point,
         // where the ghost can change direction from moving horizontally to vertically.
-        int col = getBlinky().getPositionX() / CELL_SIZE;
-        int row = getBlinky().getPositionY() / CELL_SIZE;
+        int col = ghost.getPositionX() / CELL_SIZE;
+        int row = ghost.getPositionY() / CELL_SIZE;
         double TURNING_WINDOW = 3.25;
 
-        if (getPacmanMap().getCell(row, col).isTurning() && (col + 1) * CELL_SIZE - TURNING_WINDOW > getBlinky().getPositionX()) {
+        if (getPacmanMap().getCell(row, col).isTurning() && (col + 1) * CELL_SIZE - TURNING_WINDOW > ghost.getPositionX()) {
             return col * CELL_SIZE;
         } else if (getPacmanMap().getCell(row, col + 1).isTurning() &&
-                col * CELL_SIZE + TURNING_WINDOW < getBlinky().getPositionX()) {
+                col * CELL_SIZE + TURNING_WINDOW < ghost.getPositionX()) {
             return (col + 1) * CELL_SIZE;
         }
-        if (getBlinky().getHeading().equals("S") || getBlinky().getHeading().equals("N")) {
-            return getBlinky().getPositionX();
+        if (ghost.getHeading().equals("S") || ghost.getHeading().equals("N")) {
+            return ghost.getPositionX();
         }
         // if ghost is not close to the turning point and currently heading south or north
         return -1;
     }
 
-    public int checkPathXAxisForGhost() {
+    public int checkPathXAxisForGhost(Entity ghost) {
         // checks if the ghost is close to a turning point,
         // where the ghost can change direction from moving vertically to horizontally.
-        int col = getBlinky().getPositionX() / CELL_SIZE;
-        int row = getPlayer().getPositionY() / CELL_SIZE;
+        int col = ghost.getPositionX() / CELL_SIZE;
+        int row = ghost.getPositionY() / CELL_SIZE;
         double TURNING_WINDOW = 3.25;
 
-        if (getPacmanMap().getCell(row, col).isTurning() && (row + 1) * CELL_SIZE - TURNING_WINDOW > getBlinky().getPositionY()) {
+        if (getPacmanMap().getCell(row, col).isTurning() && (row + 1) * CELL_SIZE - TURNING_WINDOW > ghost.getPositionY()) {
             return row * CELL_SIZE;
         } else if (getPacmanMap().getCell(row + 1, col).isTurning() &&
-                row * CELL_SIZE + TURNING_WINDOW < getBlinky().getPositionY()) {
+                row * CELL_SIZE + TURNING_WINDOW < ghost.getPositionY()) {
             return (row + 1) * CELL_SIZE;
         }
-        if (getBlinky().getHeading().equals("W") || getPlayer().getHeading().equals("E")) {
-            return getBlinky().getPositionY();
+        if (ghost.getHeading().equals("W") || ghost.getHeading().equals("E")) {
+            return ghost.getPositionY();
         }
         // if ghost is not close to the turning point and currently heading west or east
         return -1;
