@@ -17,7 +17,6 @@ public class BlinkyAI implements AI {
 
         CellNode nextMove = bfs(game.getPacmanMap(), ghostRow, ghostCol, pacmanRow, pacmanCol);
         if (nextMove != null) {
-            // System.out.println("I SEE YOU!");
             if (nextMove.row > ghostRow){
                 return "S";
             } else if (nextMove.row < ghostRow) {
@@ -26,7 +25,6 @@ public class BlinkyAI implements AI {
                 return "E";
             } else {return "W";}
         } else {
-            System.out.println("I CAN'T SEE ANY WAY WE CAN MEET TOGETHER!");
             System.out.println("Player row and col: " + pacmanRow + "  " + pacmanCol);
             System.out.println("Ghost row and col: " + ghostRow + "  " + ghostCol);
             Random rand = new Random();
@@ -65,9 +63,16 @@ public class BlinkyAI implements AI {
             CellNode v = q.peek();
             q.remove();
 
-            // check if approach pacman
-            if ((v.row == destRow || v.row-1  == destRow || v.row+1==destRow)
-                    && (v.col == destCol || v.col-1==destCol || v.col+1==destCol)) {
+            if ((v.row == destRow && v.col == destCol && !map.getCell(v.row, v.col).getWall()) ||
+                    (v.row == destRow && v.col-1 == destCol && !map.getCell(v.row, v.col-1).getWall()) ||
+                    (v.row == destRow && v.col+1 == destCol && !map.getCell(v.row, v.col+1).getWall()) ||
+                    (v.row-1 == destRow && v.col == destCol && !map.getCell(v.row-1, v.col).getWall()) ||
+                    (v.row+1 == destRow && v.col == destCol && !map.getCell(v.row+1, v.col).getWall()) ||
+                    (v.row-1 == destRow && v.col-1 == destCol && !map.getCell(v.row-1, v.col-1).getWall()) ||
+                    (v.row-1 == destRow && v.col+1==destCol && !map.getCell(v.row-1, v.col+1).getWall()) ||
+                    (v.row+1==destRow && v.col-1 == destCol && !map.getCell(v.row+1, v.col-1).getWall()) ||
+                    (v.row+1==destRow && v.col+1==destCol && !map.getCell(v.row+1, v.col+1).getWall()))
+            {
                 CellNode nextMove = null;
                 while ( v.previous!=null ) {
                     nextMove = v;
