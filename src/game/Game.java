@@ -22,7 +22,7 @@ public class Game {
     private int startY = 45;
 
     private double base_speed = 5;
-    private double ghost_base_speed = 5;
+    private double ghost_base_speed = 3;
     private boolean toggleAnimation = false;
 
     public Game(int cellSize) {

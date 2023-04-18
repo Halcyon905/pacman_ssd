@@ -26,7 +26,9 @@ public class BlinkyAI implements AI {
                 return "E";
             } else {return "W";}
         } else {
-            // System.out.println("I CAN'T SEE ANY WAY WE CAN MEET TOGETHER!");
+            System.out.println("I CAN'T SEE ANY WAY WE CAN MEET TOGETHER!");
+            System.out.println("Player row and col: " + pacmanRow + "  " + pacmanCol);
+            System.out.println("Ghost row and col: " + ghostRow + "  " + ghostCol);
             Random rand = new Random();
             String[] direction = {"N", "E", "W", "S"};
             int randomIndex = rand.nextInt(direction.length);
@@ -64,7 +66,8 @@ public class BlinkyAI implements AI {
             q.remove();
 
             // check if approach pacman
-            if (v.row == destRow && v.col == destCol) {
+            if ((v.row == destRow || v.row-1  == destRow || v.row+1==destRow)
+                    && (v.col == destCol || v.col-1==destCol || v.col+1==destCol)) {
                 CellNode nextMove = null;
                 while ( v.previous!=null ) {
                     nextMove = v;
