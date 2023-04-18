@@ -1,27 +1,44 @@
 package game;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Stack;
 import entity.Entity;
 
 
 public class InkyAI implements AI{
+    private Entity currentTarget;
+    private final int targetChangeInterval;
+    private int updateCounter;
+
+    public InkyAI() {
+        currentTarget = null;
+        targetChangeInterval=15;
+        updateCounter = 0;
+    }
+
+    private Entity chooseNewTarget(Game game) {
+        ArrayList<Entity> ghosts = new ArrayList<>();
+        ghosts.add(game.getBlinky());
+        ghosts.add(game.getClyde());
+        Random random = new Random();
+        int randomIndex = random.nextInt(ghosts.size());
+
+        return ghosts.get(randomIndex);
+    }
 
     @Override
     public String getNextMove(Entity ghost, Entity pacman, Game game) {
-        // Get the current row and column of the ghost and pacman
+
+        if (updateCounter % targetChangeInterval == 0) {
+            currentTarget = chooseNewTarget(game);
+        }
+        updateCounter++;
+        // Get the current row and column of the ghost and target
         int ghostCol = (int) (ghost.getPositionX() / game.getCellSize());
         int ghostRow = (int) (ghost.getPositionY() / game.getCellSize());
-        Random rand = new Random();
-        int int_random = rand.nextInt(2);
-        int targetCol = (int) (game.getBlinky().getPositionX() / game.getCellSize());
-        int targetRow = (int) (game.getBlinky().getPositionY() / game.getCellSize());
-        if (int_random == 1){
-            targetCol = (int) (game.getClyde().getPositionX() / game.getCellSize());
-            targetRow = (int) (game.getClyde().getPositionY() / game.getCellSize());
-        }
-
+        int targetCol = (int) (currentTarget.getPositionX() / game.getCellSize());
+        int targetRow = (int) (currentTarget.getPositionY() / game.getCellSize());
 
         CellNode nextMove = bfs(game.getPacmanMap(), ghostRow, ghostCol, targetRow, targetCol);
         if (nextMove != null) {
@@ -33,12 +50,13 @@ public class InkyAI implements AI{
                 return "E";
             } else {return "W";}
         } else {
-            rand = new Random();
+            Random rand = new Random();
             String[] direction = {"N", "E", "W", "S"};
             int randomIndex = rand.nextInt(direction.length);
             return direction[randomIndex];
         }
     }
+
 
     private static class CellNode {
         int row;
