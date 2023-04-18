@@ -90,9 +90,10 @@ public class GameGUI extends JFrame {
         private static final int PAC_PADDING = 3;
         private static final int PELLET_PADDING = 2;
         private HashMap<String, Image> imageDirection = new HashMap<String, Image>();
+        private HashMap<String, Image> blinkyImageDirection = new HashMap<>();
         private Image imageClosed;
-        private Image blinkyImage;
         private Image clydeImage;
+        private Image inkyImage;
 
         public GridUI() {
             setPreferredSize(new Dimension(mapWidth * CELL_SIZE, mapHeight * CELL_SIZE));
@@ -102,8 +103,13 @@ public class GameGUI extends JFrame {
             imageDirection.put("E", new ImageIcon("img/pacman_east.png").getImage());
             imageClosed = new ImageIcon("img/pacman_closed.png").getImage();
 
-            blinkyImage = new ImageIcon("img/blinky.png").getImage();
+            blinkyImageDirection.put("N", new ImageIcon("img/blinky/blinky_north.png").getImage());
+            blinkyImageDirection.put("S", new ImageIcon("img/blinky/blinky_south.png").getImage());
+            blinkyImageDirection.put("W", new ImageIcon("img/blinky/blinky_west.png").getImage());
+            blinkyImageDirection.put("E", new ImageIcon("img/blinky/blinky_east.png").getImage());
+
             clydeImage = new  ImageIcon("img/clyde.png").getImage();
+            inkyImage = new ImageIcon("img/inky.png").getImage();
 
             getInputMap().put(KeyStroke.getKeyStroke("W"), "w pressed");
             getInputMap().put(KeyStroke.getKeyStroke("A"), "a pressed");
@@ -198,9 +204,13 @@ public class GameGUI extends JFrame {
             g.drawImage(getPacmanImage(), game.getPlayer().getPositionX() + PAC_PADDING, game.getPlayer().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
-            g.drawImage(blinkyImage, game.getBlinky().getPositionX() + PAC_PADDING, game.getBlinky().getPositionY() + PAC_PADDING,
+            g.drawImage(getBlinkyImage(), game.getBlinky().getPositionX() + PAC_PADDING, game.getBlinky().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
+            g.drawImage(inkyImage, game.getInky().getPositionX() + PAC_PADDING, game.getInky().getPositionY() + PAC_PADDING,
+                    (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
+                    null, null);
+
             g.drawImage(clydeImage, game.getClyde().getPositionX() + PAC_PADDING, game.getClyde().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
@@ -211,6 +221,10 @@ public class GameGUI extends JFrame {
                 return imageDirection.get(game.getPlayer().getHeading());
             }
             return imageClosed;
+        }
+
+        public Image getBlinkyImage() {
+            return blinkyImageDirection.get(game.getBlinky().getHeading());
         }
 
         public void paintCell(Graphics g, int row, int col) {

@@ -11,6 +11,7 @@ public class Game {
     private Map pacmanMap;
     private Entity player;
     private Entity blinky;
+    private Entity inky;
     private Entity clyde;
     private HashMap<Entity, AI> ghostAI = new HashMap<Entity, AI>();
     private int mapHeight = 61;
@@ -21,7 +22,7 @@ public class Game {
     private int startX = 26;
     private int startY = 45;
 
-    private double base_speed = 5;
+    private double base_speed = 4;
     private double ghost_base_speed = 3;
     private boolean toggleAnimation = false;
 
@@ -31,8 +32,10 @@ public class Game {
         pacmanMap = new Map(mapWidth, mapHeight);
         player = new Entity(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed); //map1: 26, 45 / map2: 27, 29
         blinky = new Entity(11 * CELL_SIZE, 27 * CELL_SIZE, ghost_base_speed);
+        inky = new Entity(32 * CELL_SIZE, 45 * CELL_SIZE, ghost_base_speed);
         clyde = new Entity(26 * CELL_SIZE, 9 * CELL_SIZE, ghost_base_speed);
         ghostAI.put(blinky, new BlinkyAI());
+        ghostAI.put(inky, new InkyAI());
         ghostAI.put(clyde, new ClydeAI());
     }
 
@@ -43,6 +46,7 @@ public class Game {
         return pacmanMap;
     }
     public Entity getBlinky() { return blinky; }
+    public Entity getInky() { return inky; }
     public Entity getClyde() {return clyde; }
     public int getLives() {
         return lives;
@@ -68,6 +72,7 @@ public class Game {
         updatePlayer();
         updateGhost(blinky);
         updateGhost(clyde);
+        updateGhost(inky);
         if(pacmanMap.checkPelletOnMap()) {
             gameState = 2;
         }

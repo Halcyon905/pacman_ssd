@@ -1,21 +1,29 @@
 package game;
-
-import entity.Entity;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Stack;
+import entity.Entity;
 
-public class BlinkyAI implements AI {
+
+public class InkyAI implements AI{
 
     @Override
     public String getNextMove(Entity ghost, Entity pacman, Game game) {
         // Get the current row and column of the ghost and pacman
         int ghostCol = (int) (ghost.getPositionX() / game.getCellSize());
         int ghostRow = (int) (ghost.getPositionY() / game.getCellSize());
-        int pacmanCol = (int) (pacman.getPositionX() / game.getCellSize());
-        int pacmanRow = (int) (pacman.getPositionY() / game.getCellSize());
+        Random rand = new Random();
+        int int_random = rand.nextInt(2);
+        int targetCol = (int) (game.getBlinky().getPositionX() / game.getCellSize());
+        int targetRow = (int) (game.getBlinky().getPositionY() / game.getCellSize());
+        if (int_random == 1){
+            targetCol = (int) (game.getClyde().getPositionX() / game.getCellSize());
+            targetRow = (int) (game.getClyde().getPositionY() / game.getCellSize());
+        }
 
-        CellNode nextMove = bfs(game.getPacmanMap(), ghostRow, ghostCol, pacmanRow, pacmanCol);
+
+        CellNode nextMove = bfs(game.getPacmanMap(), ghostRow, ghostCol, targetRow, targetCol);
         if (nextMove != null) {
             if (nextMove.row > ghostRow){
                 return "S";
@@ -25,7 +33,7 @@ public class BlinkyAI implements AI {
                 return "E";
             } else {return "W";}
         } else {
-            Random rand = new Random();
+            rand = new Random();
             String[] direction = {"N", "E", "W", "S"};
             int randomIndex = rand.nextInt(direction.length);
             return direction[randomIndex];
@@ -43,7 +51,6 @@ public class BlinkyAI implements AI {
             this.previous = previous;
         }
     }
-
     private CellNode bfs(Map map, int startRow, int startCol, int destRow, int destCol){
         Queue<CellNode> q = new LinkedList<>();
         Boolean[][] seen = new Boolean[map.getHeight()][map.getWidth()];
@@ -77,8 +84,8 @@ public class BlinkyAI implements AI {
                 int possibleRow = v.row + moveVariation[moveIndex][0];
                 int possibleCol = v.col + moveVariation[moveIndex][1];
                 if (possibleRow >= 0 && possibleRow < map.getHeight() &&
-                possibleCol >= 0 && possibleCol < map.getWidth() &&
-                !seen[possibleRow][possibleCol] && !map.getCell(possibleRow, possibleCol).getWall()){
+                        possibleCol >= 0 && possibleCol < map.getWidth() &&
+                        !seen[possibleRow][possibleCol] && !map.getCell(possibleRow, possibleCol).getWall()){
                     if (possibleRow < v.row && map.getCell(v.row-1, v.col).getWall()){
                         continue;
                     }
