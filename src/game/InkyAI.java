@@ -34,7 +34,7 @@ public class InkyAI implements AI{
             currentTarget = chooseNewTarget(game);
         }
         updateCounter++;
-        // Get the current row and column of the ghost and target
+        
         int ghostCol = (int) (ghost.getPositionX() / game.getCellSize());
         int ghostRow = (int) (ghost.getPositionY() / game.getCellSize());
         int targetCol = (int) (currentTarget.getPositionX() / game.getCellSize());
