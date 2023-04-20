@@ -86,7 +86,7 @@ public class InkyAI implements AI{
             CellNode v = q.peek();
             q.remove();
 
-            if (isCloseToPacman(map, destRow, destCol, v)) {
+            if (isCloseToGhost(map, destRow, destCol, v)) {
                 // back track to get the nextMove from the path
                 CellNode nextMove = null;
                 while (v.previous != null) {
@@ -125,7 +125,7 @@ public class InkyAI implements AI{
         return null;
     }
 
-    private static boolean isCloseToPacman(Map map, int destRow, int destCol, CellNode v) {
+    private static boolean isCloseToGhost(Map map, int destRow, int destCol, CellNode v) {
         // check if v is close enough to pacman row and col
         boolean found = false;
         for (int rowOffset = -2; rowOffset <= 2; rowOffset++) {
