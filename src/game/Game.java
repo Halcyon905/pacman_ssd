@@ -3,6 +3,7 @@ package game;
 import entity.Entity;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Game {
@@ -13,6 +14,7 @@ public class Game {
     private Entity blinky;
     private Entity inky;
     private Entity clyde;
+    private Entity pinky;
     private HashMap<Entity, AI> ghostAI = new HashMap<Entity, AI>();
     private int mapHeight = 61;
     private int mapWidth = 55;
@@ -30,13 +32,16 @@ public class Game {
         CELL_SIZE = cellSize;
 
         pacmanMap = new Map(mapWidth, mapHeight);
+        pacmanMap.setDefaultMap("src/mapLayout/pacman_map.csv");
         player = new Entity(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed); //map1: 26, 45 / map2: 27, 29
         blinky = new Entity(11 * CELL_SIZE, 27 * CELL_SIZE, ghost_base_speed);
         inky = new Entity(32 * CELL_SIZE, 45 * CELL_SIZE, ghost_base_speed);
         clyde = new Entity(26 * CELL_SIZE, 9 * CELL_SIZE, ghost_base_speed);
+        pinky = new Entity(26 * CELL_SIZE, 21 * CELL_SIZE, ghost_base_speed);
         ghostAI.put(blinky, new BlinkyAI());
         ghostAI.put(inky, new InkyAI());
         ghostAI.put(clyde, new ClydeAI());
+        ghostAI.put(pinky, new PinkyAi(pacmanMap));
     }
 
     public Entity getPlayer() {
@@ -48,6 +53,9 @@ public class Game {
     public Entity getBlinky() { return blinky; }
     public Entity getInky() { return inky; }
     public Entity getClyde() {return clyde; }
+
+    public Entity getPinky() {return pinky; }
+
     public int getLives() {
         return lives;
     }
@@ -73,6 +81,7 @@ public class Game {
         updateGhost(blinky);
         updateGhost(clyde);
         updateGhost(inky);
+        updateGhost(pinky);
         if(pacmanMap.checkPelletOnMap()) {
             gameState = 2;
         }

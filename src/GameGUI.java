@@ -34,8 +34,6 @@ public class GameGUI extends JFrame {
         add(gridUI, BorderLayout.SOUTH);
         pack();
 
-        game.getPacmanMap().setDefaultMap("src/mapLayout/pacman_map.csv");
-
         while(true) {
             Thread gameThread = new Thread() {
                 @Override
@@ -94,6 +92,7 @@ public class GameGUI extends JFrame {
         private Image imageClosed;
         private Image clydeImage;
         private Image inkyImage;
+        private Image pinkyImage;
 
         public GridUI() {
             setPreferredSize(new Dimension(mapWidth * CELL_SIZE, mapHeight * CELL_SIZE));
@@ -110,6 +109,7 @@ public class GameGUI extends JFrame {
 
             clydeImage = new  ImageIcon("img/clyde.png").getImage();
             inkyImage = new ImageIcon("img/inky.png").getImage();
+            pinkyImage = new ImageIcon("img/pinky.png").getImage();
 
             getInputMap().put(KeyStroke.getKeyStroke("W"), "w pressed");
             getInputMap().put(KeyStroke.getKeyStroke("A"), "a pressed");
@@ -214,6 +214,10 @@ public class GameGUI extends JFrame {
             g.drawImage(clydeImage, game.getClyde().getPositionX() + PAC_PADDING, game.getClyde().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
+            g.drawImage(pinkyImage, game.getPinky().getPositionX() + PAC_PADDING, game.getPinky().getPositionY() + PAC_PADDING,
+                    (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
+                    null, null);
+
         }
 
         public Image getPacmanImage() {
