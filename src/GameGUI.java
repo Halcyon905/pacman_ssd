@@ -89,10 +89,10 @@ public class GameGUI extends JFrame {
         private static final int PELLET_PADDING = 2;
         private HashMap<String, Image> imageDirection = new HashMap<String, Image>();
         private HashMap<String, Image> blinkyImageDirection = new HashMap<>();
+        private HashMap<String, Image> clydeImageDirection = new HashMap<String, Image>();
+        private HashMap<String, Image> pinkyImageDirection = new HashMap<String, Image>();
         private Image imageClosed;
-        private Image clydeImage;
         private Image inkyImage;
-        private Image pinkyImage;
 
         public GridUI() {
             setPreferredSize(new Dimension(mapWidth * CELL_SIZE, mapHeight * CELL_SIZE));
@@ -107,9 +107,17 @@ public class GameGUI extends JFrame {
             blinkyImageDirection.put("W", new ImageIcon("img/blinky/blinky_west.png").getImage());
             blinkyImageDirection.put("E", new ImageIcon("img/blinky/blinky_east.png").getImage());
 
-            clydeImage = new  ImageIcon("img/clyde.png").getImage();
+            clydeImageDirection.put("N", new ImageIcon("img/clyde/clyde_north.png").getImage());
+            clydeImageDirection.put("S", new ImageIcon("img/clyde/clyde_south.png").getImage());
+            clydeImageDirection.put("W", new ImageIcon("img/clyde/clyde_west.png").getImage());
+            clydeImageDirection.put("E", new ImageIcon("img/clyde/clyde_east.png").getImage());
+
+            pinkyImageDirection.put("N", new ImageIcon("img/pinky/pinky_north.png").getImage());
+            pinkyImageDirection.put("S", new ImageIcon("img/pinky/pinky_south.png").getImage());
+            pinkyImageDirection.put("W", new ImageIcon("img/pinky/pinky_west.png").getImage());
+            pinkyImageDirection.put("E", new ImageIcon("img/pinky/pinky_east.png").getImage());
+
             inkyImage = new ImageIcon("img/inky.png").getImage();
-            pinkyImage = new ImageIcon("img/pinky.png").getImage();
 
             getInputMap().put(KeyStroke.getKeyStroke("W"), "w pressed");
             getInputMap().put(KeyStroke.getKeyStroke("A"), "a pressed");
@@ -211,10 +219,10 @@ public class GameGUI extends JFrame {
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
 
-            g.drawImage(clydeImage, game.getClyde().getPositionX() + PAC_PADDING, game.getClyde().getPositionY() + PAC_PADDING,
+            g.drawImage(getClydeImage(), game.getClyde().getPositionX() + PAC_PADDING, game.getClyde().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
-            g.drawImage(pinkyImage, game.getPinky().getPositionX() + PAC_PADDING, game.getPinky().getPositionY() + PAC_PADDING,
+            g.drawImage(getPinkyImage(), game.getPinky().getPositionX() + PAC_PADDING, game.getPinky().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
 
@@ -230,6 +238,12 @@ public class GameGUI extends JFrame {
         public Image getBlinkyImage() {
             return blinkyImageDirection.get(game.getBlinky().getHeading());
         }
+
+        public Image getClydeImage() {
+            return clydeImageDirection.get(game.getClyde().getHeading());
+        }
+
+        public Image getPinkyImage() {return pinkyImageDirection.get(game.getPinky().getHeading()); }
 
         public void paintCell(Graphics g, int row, int col) {
             Cell cell = game.getPacmanMap().getCell(row, col);
