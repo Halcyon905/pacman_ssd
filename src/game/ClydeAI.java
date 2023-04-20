@@ -7,11 +7,10 @@ import java.util.Objects;
 import java.util.Random;
 
 public class ClydeAI implements AI{
-
-    private String oldWay = "";
     private String nextWay = "";
     private int oldCol = 0;
     private int oldRow = 0;
+    private final String[] direction = {"N", "E", "W", "S"};
 
     @Override
     public String getNextMove(Entity ghost, Entity pacman, Game game){
@@ -20,20 +19,14 @@ public class ClydeAI implements AI{
         if(col != oldCol || row != oldRow){
             Random rand = new Random();
             game.Map map = game.getPacmanMap();
-            String[] direction = {"N", "E", "W", "S"};
             int randomIndex = rand.nextInt(direction.length);
             while (checkWall(ghost, direction[randomIndex], map, game)) {
                 randomIndex = rand.nextInt(direction.length);
-                System.out.println("Check");
             }
             oldCol = col;
             oldRow = row;
         }
         return nextWay;
-    }
-
-    private boolean checkWay(String direction){
-        return (direction.equals(oldWay));
     }
 
     private boolean checkWall(Entity ghost, String direction, game.Map map, Game game){
@@ -51,10 +44,8 @@ public class ClydeAI implements AI{
         }
         if(!checkCell){
             nextWay = direction;
-            System.out.println(nextWay + "-" + checkCell);
             return false;
         } else {
-            System.out.println(direction);
             return true;
         }
     }
