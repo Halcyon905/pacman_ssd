@@ -31,7 +31,6 @@ public class PinkyAi implements AI{
                 }
             }
         }
-        System.out.println(power);
     }
 
     private int chooseNewTarget() {
@@ -64,8 +63,6 @@ public class PinkyAi implements AI{
         int targetCol = power.get(currentTarget).get(1);
         int targetRow = power.get(currentTarget).get(0);
 
-        System.out.println(targetRow + "-" + targetCol + "-" + getToPower);
-        System.out.println(ghostRow + "-" + ghostCol + "-" + "Ghost");
         if (ghostRow == targetRow || ghostCol == targetCol){
             getToPower = true;
         }
