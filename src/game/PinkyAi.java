@@ -133,7 +133,7 @@ public class PinkyAi implements AI{
             CellNode v = q.peek();
             q.remove();
 
-            if (isCloseToPacman(map, destRow, destCol, v)) {
+            if (isCloseToTarget(map, destRow, destCol, v)) {
                 // back track to get the nextMove from the path
                 CellNode nextMove = null;
                 while (v.previous != null) {
@@ -172,8 +172,8 @@ public class PinkyAi implements AI{
         return null;
     }
 
-    private static boolean isCloseToPacman(Map map, int destRow, int destCol, CellNode v) {
-        // check if v is close enough to pacman row and col
+    private static boolean isCloseToTarget(Map map, int destRow, int destCol, CellNode v) {
+        // check if v is close enough to target row and col
         boolean found = false;
         for (int rowOffset = -2; rowOffset <= 2; rowOffset++) {
             for (int colOffset = -2; colOffset <= 2; colOffset++) {
