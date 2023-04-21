@@ -25,6 +25,7 @@ public class BlinkyAI implements AI {
                 return "E";
             } else {return "W";}
         } else {
+            // System.out.println("I can't see!!");
             Random rand = new Random();
             String[] direction = {"N", "E", "W", "S"};
             int randomIndex = rand.nextInt(direction.length);
@@ -61,24 +62,29 @@ public class BlinkyAI implements AI {
             CellNode v = q.peek();
             q.remove();
 
-            if (isCloseToPacman(map, destRow, destCol, v)) {
-                // back track to get the nextMove from the path
-                CellNode nextMove = null;
-                while (v.previous != null) {
-                    nextMove = v;
-                    v = v.previous;
+            // check if ghost is close to pacman
+            int rowDiff = Math.abs(v.row - destRow);
+            int colDiff = Math.abs(v.col - destCol);
+            if (rowDiff <= 1 && colDiff <= 1) {
+                if (!map.getCell(v.row, v.col).getWall() && !map.getCell(destRow, destCol).getWall()) {
+                    // back track to get the nextMove from the path
+                    CellNode nextMove = null;
+                    while (v.previous != null) {
+                        nextMove = v;
+                        v = v.previous;
+                    }
+                    return nextMove;
                 }
-                return nextMove;
             }
 
-            int [][] moveVariation = {{-3, 0}, {0, 3}, {3, 0}, {0, -3}};
+            int [][] moveVariation = {{-1, 0}, {0, 3}, {3, 0}, {0, -1}};
 
             for (int moveIndex=0; moveIndex<4; moveIndex++){
                 int possibleRow = v.row + moveVariation[moveIndex][0];
                 int possibleCol = v.col + moveVariation[moveIndex][1];
                 if (possibleRow >= 0 && possibleRow < map.getHeight() &&
-                possibleCol >= 0 && possibleCol < map.getWidth() &&
-                !seen[possibleRow][possibleCol] && !map.getCell(possibleRow, possibleCol).getWall()){
+                        possibleCol >= 0 && possibleCol < map.getWidth() &&
+                        !seen[possibleRow][possibleCol] && !map.getCell(possibleRow, possibleCol).getWall()){
                     if (possibleRow < v.row && map.getCell(v.row-1, v.col).getWall()){
                         continue;
                     }
@@ -98,26 +104,5 @@ public class BlinkyAI implements AI {
             }
         }
         return null;
-    }
-
-    private static boolean isCloseToPacman(Map map, int destRow, int destCol, CellNode v) {
-        // check if v is close enough to pacman row and col
-        boolean found = false;
-        for (int rowOffset = -2; rowOffset <= 2; rowOffset++) {
-            for (int colOffset = -2; colOffset <= 2; colOffset++) {
-                int newRow = v.row + rowOffset;
-                int newCol = v.col + colOffset;
-
-                if (newRow >= 0 && newRow < map.getHeight() &&
-                        newCol >= 0 && newCol < map.getWidth() &&
-                        !map.getCell(newRow, newCol).getWall() &&
-                        (newRow == destRow && newCol == destCol)) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) break;
-        }
-        return found;
     }
 }
