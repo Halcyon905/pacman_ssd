@@ -39,25 +39,6 @@ public class PinkyAi implements AI{
 
     @Override
     public String getNextMove(Entity ghost, Entity pacman, Game game) {
-        if (updateCounter % targetChangeInterval == 0 && getToPower) {
-            updateCounter++;
-            getToPower = false;
-            currentTarget = chooseNewTarget();
-        }
-        if (getToPower){
-            updateCounter++;
-            if(ghost.getPositionY() != oldCol || ghost.getPositionX() != oldRow) {
-                int randomIndex = rand.nextInt(direction.length);
-                while (checkWall(ghost, direction[randomIndex], game.getPacmanMap(), game)) {
-                    randomIndex = rand.nextInt(direction.length);
-                }
-                oldCol = ghost.getPositionY();
-                oldRow = ghost.getPositionX();
-            }
-            return nextWay;
-        }
-
-
         int ghostCol = (int) (ghost.getPositionX() / game.getCellSize());
         int ghostRow = (int) (ghost.getPositionY() / game.getCellSize());
         int targetCol = power.get(currentTarget).get(1);
@@ -67,21 +48,32 @@ public class PinkyAi implements AI{
             getToPower = true;
         }
 
-        CellNode nextMove = bfs(game.getPacmanMap(), ghostRow, ghostCol, targetRow, targetCol);
-        if (nextMove != null) {
-            if (nextMove.row > ghostRow){
-                return "S";
-            } else if (nextMove.row < ghostRow) {
-                return "N";
-            } else if (nextMove.col > ghostCol) {
-                return "E";
-            } else {return "W";}
-        } else {
-            Random rand = new Random();
-            String[] direction = {"N", "E", "W", "S"};
-            int randomIndex = rand.nextInt(direction.length);
-            return direction[randomIndex];
+        if (updateCounter % targetChangeInterval == 0 && getToPower) {
+            updateCounter++;
+            getToPower = false;
+            currentTarget = chooseNewTarget();
         }
+        if (getToPower) {
+            updateCounter++;
+            if (ghostCol != oldCol || ghostRow != oldRow) {
+                int randomIndex = rand.nextInt(direction.length);
+                while (checkWall(ghost, direction[randomIndex], game.getPacmanMap(), game)) {
+                    randomIndex = rand.nextInt(direction.length);
+                }
+                oldCol = ghostCol;
+                oldRow = ghostRow;
+            }
+            return nextWay;
+        }
+
+        CellNode nextMove = bfs(game.getPacmanMap(), ghostRow, ghostCol, targetRow, targetCol);
+        if (nextMove.row > ghostRow){
+            return "S";
+        } else if (nextMove.row < ghostRow) {
+            return "N";
+        } else if (nextMove.col > ghostCol) {
+            return "E";
+        } else {return "W";}
     }
     private boolean checkWall(Entity ghost, String direction, game.Map map, Game game){
         int col = ghost.getPositionX() / game.getCellSize();
