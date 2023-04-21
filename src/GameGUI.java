@@ -240,14 +240,6 @@ public class GameGUI extends JFrame {
             return imageClosed;
         }
 
-//        public Image getBlinkyImage() {
-//            return blinkyImageDirection.get(game.getBlinky().getHeading());
-//        }
-//
-//        public Image getInkyImage() {
-//            return inkyImageDirection.get(game.getInky().getHeading());
-//        }
-
         public Image getGhostImage(Entity ghost, HashMap<String, Image> images) { return images.get(ghost.getHeading());}
 
         public void paintCell(Graphics g, int row, int col) {
