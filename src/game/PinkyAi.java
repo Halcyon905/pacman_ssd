@@ -78,16 +78,12 @@ public class PinkyAi implements AI{
     private boolean checkWall(Entity ghost, String direction, game.Map map, Game game){
         int col = ghost.getPositionX() / game.getCellSize();
         int row = ghost.getPositionY() / game.getCellSize();
-        boolean checkCell;
-        if(direction.equals("N")){
-            checkCell = map.getCell(row-1, col).getWall();
-        } else if (direction.equals("S")){
-            checkCell = map.getCell(row+3, col).getWall();
-        } else if (direction.equals("E")){
-            checkCell = map.getCell(row, col+3).getWall();
-        } else{
-            checkCell = map.getCell(row, col-1).getWall();
-        }
+        boolean checkCell = switch (direction) {
+            case "N" -> map.getCell(row - 1, col).getWall();
+            case "S" -> map.getCell(row + 3, col).getWall();
+            case "E" -> map.getCell(row, col + 3).getWall();
+            default -> map.getCell(row, col - 1).getWall();
+        };
         if(!checkCell){
             nextWay = direction;
             return false;
@@ -113,9 +109,7 @@ public class PinkyAi implements AI{
         Boolean[][] seen = new Boolean[map.getHeight()][map.getWidth()];
         // mark all cell as unvisited
         for (int mapRow = 0; mapRow < map.getHeight(); mapRow++){
-            for (int mapCol=0; mapCol < map.getWidth(); mapCol++){
-                seen[mapRow][mapCol] = false;
-            }
+            Arrays.fill(seen[mapRow], false);
         }
         CellNode startCellNode = new CellNode(startRow, startCol, null);
         q.add(startCellNode);
@@ -125,7 +119,10 @@ public class PinkyAi implements AI{
             CellNode v = q.peek();
             q.remove();
 
-            if (isCloseToTarget(map, destRow, destCol, v)) {
+            // check if ghost is close to other ghost
+            int rowDiff = Math.abs(v.row - destRow);
+            int colDiff = Math.abs(v.col - destCol);
+            if (rowDiff <= 1 && colDiff <= 1){
                 // back track to get the nextMove from the path
                 CellNode nextMove = null;
                 while (v.previous != null) {
@@ -135,7 +132,7 @@ public class PinkyAi implements AI{
                 return nextMove;
             }
 
-            int [][] moveVariation = {{-3, 0}, {0, 3}, {3, 0}, {0, -3}};
+            int [][] moveVariation = {{-1, 0}, {0, 3}, {3, 0}, {0, -1}};
 
             for (int moveIndex=0; moveIndex<4; moveIndex++){
                 int possibleRow = v.row + moveVariation[moveIndex][0];
@@ -162,26 +159,5 @@ public class PinkyAi implements AI{
             }
         }
         return null;
-    }
-
-    private static boolean isCloseToTarget(Map map, int destRow, int destCol, CellNode v) {
-        // check if v is close enough to target row and col
-        boolean found = false;
-        for (int rowOffset = -2; rowOffset <= 2; rowOffset++) {
-            for (int colOffset = -2; colOffset <= 2; colOffset++) {
-                int newRow = v.row + rowOffset;
-                int newCol = v.col + colOffset;
-
-                if (newRow >= 0 && newRow < map.getHeight() &&
-                        newCol >= 0 && newCol < map.getWidth() &&
-                        !map.getCell(newRow, newCol).getWall() &&
-                        (newRow == destRow && newCol == destCol)) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) break;
-        }
-        return found;
     }
 }
