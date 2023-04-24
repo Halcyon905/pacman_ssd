@@ -1,0 +1,13 @@
+# IntelliJ project files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Compiled files
+/target/
+/out/
+*.class
+
+# Log files
+*.log
