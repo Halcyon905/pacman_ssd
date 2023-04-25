@@ -67,13 +67,20 @@ public class PinkyAi implements AI{
         }
 
         CellNode nextMove = bfs(game.getPacmanMap(), ghostRow, ghostCol, targetRow, targetCol);
-        if (nextMove.row > ghostRow){
-            return "S";
-        } else if (nextMove.row < ghostRow) {
-            return "N";
-        } else if (nextMove.col > ghostCol) {
-            return "E";
-        } else {return "W";}
+        if (nextMove != null) {
+            if (nextMove.row > ghostRow){
+                return "S";
+            } else if (nextMove.row < ghostRow) {
+                return "N";
+            } else if (nextMove.col > ghostCol) {
+                return "E";
+            } else {return "W";}
+        } else {
+            Random rand = new Random();
+            String[] direction = {"N", "E", "W", "S"};
+            int randomIndex = rand.nextInt(direction.length);
+            return direction[randomIndex];
+        }
     }
     private boolean checkWall(Entity ghost, String direction, game.Map map, Game game){
         int col = ghost.getPositionX() / game.getCellSize();
