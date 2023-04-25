@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
-public class GameGUI extends JFrame {
+public class GameGUI extends JPanel {
     private static final int CELL_SIZE = 10;
     private int mapHeight = 61;
     private int mapWidth = 55;
@@ -17,70 +17,24 @@ public class GameGUI extends JFrame {
 
     public GameGUI() {
         setLayout(new BorderLayout());
-        getContentPane().setBackground(Color.BLACK);
+        setBackground(Color.BLACK);
+        setPreferredSize(new Dimension(mapWidth * CELL_SIZE, mapHeight * CELL_SIZE + 30));
 
         game = new Game(CELL_SIZE);
 
         gridUI = new GridUI();
         playerInfo = new PlayerInfo(game.getLives(), mapWidth * CELL_SIZE);
 
-        setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        startGame();
-    }
-
-    public void startGame() {
         add(playerInfo, BorderLayout.NORTH);
         add(gridUI, BorderLayout.SOUTH);
-        pack();
+    }
 
-        while(true) {
-            Thread gameThread = new Thread() {
-                @Override
-                public void run() {
-                    super.run();
-                    double timeStamp = System.currentTimeMillis();
-                    toggleAnimation = false;
-                    game.start();
+    public void enableControls() {
+        gridUI.requestFocus();
+    }
 
-                    for(int i = 3; i > 0; i--) {
-                        try {
-                            playerInfo.updateScore(i);
-                            sleep(1000);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    gridUI.requestFocus();
-
-                    while(true) {
-                        game.update();
-                        playerInfo.updateScore(game.getScore());
-                        playerInfo.updateLives(game.getLives());
-                        if(System.currentTimeMillis() - timeStamp >= 210) {
-                            timeStamp = System.currentTimeMillis();
-                            toggleAnimation = !toggleAnimation;
-                        }
-                        repaint();
-                        if(game.getGameState() == 2 || game.getGameState() == 3) {
-                            break;
-                        }
-                        try {
-                            sleep(42);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            };
-            gameThread.run();
-            if(game.getGameState() == 3) {
-                break;
-            }
-            game.reset();
-            playerInfo.requestFocus();
-        }
+    public void disableControls() {
+        playerInfo.requestFocus();
     }
 
     private class GridUI extends JPanel {
@@ -258,9 +212,5 @@ public class GameGUI extends JFrame {
                 g.fillOval(x + PELLET_PADDING - 3, y + PELLET_PADDING - 3, PELLET_SIZE + 3, PELLET_SIZE + 3);
             }
         }
-    }
-
-    public static void main(String[] args) {
-        new GameGUI();
     }
 }

@@ -2,8 +2,6 @@ package game;
 
 import entity.Entity;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Game {
@@ -53,7 +51,6 @@ public class Game {
     public Entity getBlinky() { return blinky; }
     public Entity getInky() { return inky; }
     public Entity getClyde() {return clyde; }
-
     public Entity getPinky() {return pinky; }
 
     public int getLives() {
@@ -87,6 +84,12 @@ public class Game {
         }
     }
 
+    public void reset(){
+        pacmanMap.replaceAllPellet();
+        player.headWest(startX * CELL_SIZE, startY * CELL_SIZE);
+        gameState = 0;
+    }
+
     public void updateMap() {
         int pellet = pacmanMap.updateCell((player.getPositionY() / CELL_SIZE) + 1,
                 (player.getPositionX() / CELL_SIZE) + 1);
@@ -96,12 +99,6 @@ public class Game {
         else if(pellet == 2) {
             score += 50;
         }
-    }
-
-    public void reset(){
-        pacmanMap.replaceAllPellet();
-        player.headWest(startX * CELL_SIZE, startY * CELL_SIZE);
-        gameState = 0;
     }
 
     public void updateGhost(Entity ghost) {
