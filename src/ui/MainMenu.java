@@ -1,5 +1,9 @@
+package ui;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MainMenu extends JPanel {
 
@@ -29,10 +33,22 @@ public class MainMenu extends JPanel {
         play = new JButton("Play");
         play.setSize(new Dimension(50, 50));
         play.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+        play.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GameState.state = GameState.PLAYING;
+            }
+        });
 
         exit = new JButton("Exit");
         exit.setSize(new Dimension(50, 50));
         exit.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+        exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GameState.state = GameState.EXIT;
+            }
+        });
 
         buttonPanel.add(play);
         buttonPanel.add(exit);

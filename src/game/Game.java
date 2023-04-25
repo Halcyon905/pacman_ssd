@@ -1,6 +1,7 @@
 package game;
 
 import entity.Entity;
+import game.ai.*;
 
 import java.util.HashMap;
 
@@ -24,7 +25,6 @@ public class Game {
 
     private double base_speed = 4;
     private double ghost_base_speed = 3;
-    private boolean toggleAnimation = false;
 
     public Game(int cellSize) {
         CELL_SIZE = cellSize;

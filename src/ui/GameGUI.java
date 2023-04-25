@@ -1,3 +1,5 @@
+package ui;
+
 import entity.Entity;
 import game.Cell;
 import game.Game;
@@ -10,10 +12,10 @@ public class GameGUI extends JPanel {
     private static final int CELL_SIZE = 10;
     private int mapHeight = 61;
     private int mapWidth = 55;
-    private boolean toggleAnimation = false;
-    private Game game;
-    private GridUI gridUI;
-    private PlayerInfo playerInfo;
+    public boolean toggleAnimation = false;
+    public Game game;
+    public GridUI gridUI;
+    public PlayerInfo playerInfo;
 
     public GameGUI() {
         setLayout(new BorderLayout());

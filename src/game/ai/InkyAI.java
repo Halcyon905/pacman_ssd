@@ -1,70 +1,46 @@
-package game;
-
+package game.ai;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Random;
 import entity.Entity;
+import game.Game;
+import game.Map;
 
-import java.util.*;
 
-
-public class PinkyAi implements AI{
+public class InkyAI implements AI{
+    private Entity currentTarget;
     private final int targetChangeInterval;
-    private ArrayList<ArrayList<Integer>> power = new ArrayList<ArrayList<Integer>>();
-    private int currentTarget = 0;
-    private int updateCounter = 1;
-    private boolean getToPower = false;
-    private final Random rand;
-    private final String[] direction = {"N", "E", "W", "S"};
-    private int oldCol = 0;
-    private int oldRow = 0;
-    private String nextWay;
+    private int updateCounter;
 
-    public PinkyAi(Map map){
-        this.targetChangeInterval = 20;
-        rand = new Random();
-        int index = 0;
-        for (int row = 0; row < map.getHeight(); row++){
-            for (int col = 0; col < map.getWidth(); col++){
-                if(map.getCell(row, col).getPellet() == 2){
-                    power.add(new ArrayList<Integer>());
-                    power.get(index).add(0, row-1);
-                    power.get(index).add(1, col-1);
-                    index++;
-                }
-            }
-        }
+    public InkyAI() {
+        currentTarget = null;
+        targetChangeInterval=15;
+        updateCounter = 0;
     }
 
-    private int chooseNewTarget() {
-        return rand.nextInt(power.size());
+    private Entity chooseNewTarget(Game game) {
+        ArrayList<Entity> ghosts = new ArrayList<>();
+        ghosts.add(game.getBlinky());
+        ghosts.add(game.getClyde());
+        Random random = new Random();
+        int randomIndex = random.nextInt(ghosts.size());
+
+        return ghosts.get(randomIndex);
     }
 
     @Override
     public String getNextMove(Entity ghost, Entity pacman, Game game) {
+
+        if (updateCounter % targetChangeInterval == 0) {
+            currentTarget = chooseNewTarget(game);
+        }
+        updateCounter++;
+        
         int ghostCol = (int) (ghost.getPositionX() / game.getCellSize());
         int ghostRow = (int) (ghost.getPositionY() / game.getCellSize());
-        int targetCol = power.get(currentTarget).get(1);
-        int targetRow = power.get(currentTarget).get(0);
-
-        if (ghostRow == targetRow || ghostCol == targetCol){
-            getToPower = true;
-        }
-
-        if (updateCounter % targetChangeInterval == 0 && getToPower) {
-            updateCounter++;
-            getToPower = false;
-            currentTarget = chooseNewTarget();
-        }
-        if (getToPower) {
-            updateCounter++;
-            if (ghostCol != oldCol || ghostRow != oldRow) {
-                int randomIndex = rand.nextInt(direction.length);
-                while (checkWall(ghost, direction[randomIndex], game.getPacmanMap(), game)) {
-                    randomIndex = rand.nextInt(direction.length);
-                }
-                oldCol = ghostCol;
-                oldRow = ghostRow;
-            }
-            return nextWay;
-        }
+        int targetCol = (int) (currentTarget.getPositionX() / game.getCellSize());
+        int targetRow = (int) (currentTarget.getPositionY() / game.getCellSize());
 
         CellNode nextMove = bfs(game.getPacmanMap(), ghostRow, ghostCol, targetRow, targetCol);
         if (nextMove != null) {
@@ -82,22 +58,6 @@ public class PinkyAi implements AI{
             return direction[randomIndex];
         }
     }
-    private boolean checkWall(Entity ghost, String direction, game.Map map, Game game){
-        int col = ghost.getPositionX() / game.getCellSize();
-        int row = ghost.getPositionY() / game.getCellSize();
-        boolean checkCell = switch (direction) {
-            case "N" -> map.getCell(row - 1, col).getWall();
-            case "S" -> map.getCell(row + 3, col).getWall();
-            case "E" -> map.getCell(row, col + 3).getWall();
-            default -> map.getCell(row, col - 1).getWall();
-        };
-        if(!checkCell){
-            nextWay = direction;
-            return false;
-        } else {
-            return true;
-        }
-    }
 
 
     private static class CellNode {
@@ -111,12 +71,15 @@ public class PinkyAi implements AI{
             this.previous = previous;
         }
     }
+
     private CellNode bfs(Map map, int startRow, int startCol, int destRow, int destCol){
         Queue<CellNode> q = new LinkedList<>();
         Boolean[][] seen = new Boolean[map.getHeight()][map.getWidth()];
         // mark all cell as unvisited
         for (int mapRow = 0; mapRow < map.getHeight(); mapRow++){
-            Arrays.fill(seen[mapRow], false);
+            for (int mapCol=0; mapCol < map.getWidth(); mapCol++){
+                seen[mapRow][mapCol] = false;
+            }
         }
         CellNode startCellNode = new CellNode(startRow, startCol, null);
         q.add(startCellNode);
@@ -129,14 +92,16 @@ public class PinkyAi implements AI{
             // check if ghost is close to other ghost
             int rowDiff = Math.abs(v.row - destRow);
             int colDiff = Math.abs(v.col - destCol);
-            if (rowDiff <= 1 && colDiff <= 1){
-                // back track to get the nextMove from the path
-                CellNode nextMove = null;
-                while (v.previous != null) {
-                    nextMove = v;
-                    v = v.previous;
+            if (rowDiff <= 1 && colDiff <= 1) {
+                if (!map.getCell(v.row, v.col).getWall() && !map.getCell(destRow, destCol).getWall()) {
+                    // back track to get the nextMove from the path
+                    CellNode nextMove = null;
+                    while (v.previous != null) {
+                        nextMove = v;
+                        v = v.previous;
+                    }
+                    return nextMove;
                 }
-                return nextMove;
             }
 
             int [][] moveVariation = {{-1, 0}, {0, 3}, {3, 0}, {0, -1}};
