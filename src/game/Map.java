@@ -4,6 +4,15 @@ import java.io.*;
 public class Map {
 
     private Cell[][] cellArray;
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     private int width;
     private int height;
 
@@ -63,6 +72,13 @@ public class Map {
             br.close();
         } catch(IOException ioe) {
             ioe.printStackTrace();
+        }
+        for(int row = 0; row < height; row++) {
+            for(int col = 0; col < width; col++) {
+                Cell cell = getCell(row, col);
+                if (cell.getWall()){
+                }
+            }
         }
     }
 

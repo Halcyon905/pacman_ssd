@@ -1,6 +1,6 @@
+import entity.Entity;
 import game.Cell;
 import game.Game;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -34,8 +34,6 @@ public class GameGUI extends JFrame {
         add(playerInfo, BorderLayout.NORTH);
         add(gridUI, BorderLayout.SOUTH);
         pack();
-
-        game.getPacmanMap().setDefaultMap("src/mapLayout/pacman_map.csv");
 
         while(true) {
             Thread gameThread = new Thread() {
@@ -91,7 +89,12 @@ public class GameGUI extends JFrame {
         private static final int PAC_PADDING = 3;
         private static final int PELLET_PADDING = 2;
         private HashMap<String, Image> imageDirection = new HashMap<String, Image>();
+        private HashMap<String, Image> blinkyImageDirection = new HashMap<>();
+        private HashMap<String, Image> clydeImageDirection = new HashMap<String, Image>();
+        private HashMap<String, Image> pinkyImageDirection = new HashMap<String, Image>();
+        private HashMap<String, Image> inkyImageDirection = new HashMap<>();
         private Image imageClosed;
+        private Image inkyImage;
 
         public GridUI() {
             setPreferredSize(new Dimension(mapWidth * CELL_SIZE, mapHeight * CELL_SIZE));
@@ -101,6 +104,26 @@ public class GameGUI extends JFrame {
             imageDirection.put("E", new ImageIcon("img/pacman_east.png").getImage());
             imageClosed = new ImageIcon("img/pacman_closed.png").getImage();
 
+            blinkyImageDirection.put("N", new ImageIcon("img/blinky/blinky_north.png").getImage());
+            blinkyImageDirection.put("S", new ImageIcon("img/blinky/blinky_south.png").getImage());
+            blinkyImageDirection.put("W", new ImageIcon("img/blinky/blinky_west.png").getImage());
+            blinkyImageDirection.put("E", new ImageIcon("img/blinky/blinky_east.png").getImage());
+
+            clydeImageDirection.put("N", new ImageIcon("img/clyde/clyde_north.png").getImage());
+            clydeImageDirection.put("S", new ImageIcon("img/clyde/clyde_south.png").getImage());
+            clydeImageDirection.put("W", new ImageIcon("img/clyde/clyde_west.png").getImage());
+            clydeImageDirection.put("E", new ImageIcon("img/clyde/clyde_east.png").getImage());
+
+            pinkyImageDirection.put("N", new ImageIcon("img/pinky/pinky_north.png").getImage());
+            pinkyImageDirection.put("S", new ImageIcon("img/pinky/pinky_south.png").getImage());
+            pinkyImageDirection.put("W", new ImageIcon("img/pinky/pinky_west.png").getImage());
+            pinkyImageDirection.put("E", new ImageIcon("img/pinky/pinky_east.png").getImage());
+
+            inkyImageDirection.put("N", new ImageIcon("img/inky/inky_north.png").getImage());
+            inkyImageDirection.put("S", new ImageIcon("img/inky/inky_south.png").getImage());
+            inkyImageDirection.put("W", new ImageIcon("img/inky/inky_west.png").getImage());
+            inkyImageDirection.put("E", new ImageIcon("img/inky/inky_east.png").getImage());
+
             getInputMap().put(KeyStroke.getKeyStroke("W"), "w pressed");
             getInputMap().put(KeyStroke.getKeyStroke("A"), "a pressed");
             getInputMap().put(KeyStroke.getKeyStroke("S"), "s pressed");
@@ -108,6 +131,7 @@ public class GameGUI extends JFrame {
             Action moveNorth = new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
                     int result = checkPathYAxis();
+                    // System.out.println("check path y axis");
                     if (result != -1) {
                         game.getPlayer().headNorth(result, game.getPlayer().getPositionY());
                     }
@@ -144,6 +168,8 @@ public class GameGUI extends JFrame {
         }
 
         public int checkPathYAxis() {
+            // checks if the player is close to a turning point,
+            // where the player can change direction from moving horizontally to vertically.
             int col = game.getPlayer().getPositionX() / CELL_SIZE;
             int row = game.getPlayer().getPositionY() / CELL_SIZE;
 
@@ -156,10 +182,13 @@ public class GameGUI extends JFrame {
             if (game.getPlayer().getHeading().equals("S") || game.getPlayer().getHeading().equals("N")) {
                 return game.getPlayer().getPositionX();
             }
+            // if player is not close to the turning point and currently heading west or east
             return -1;
         }
 
         public int checkPathXAxis() {
+            // checks if the player is close to a turning point,
+            // where the player can change direction from moving vertically to horizontally
             int col = game.getPlayer().getPositionX() / CELL_SIZE;
             int row = game.getPlayer().getPositionY() / CELL_SIZE;
 
@@ -188,6 +217,20 @@ public class GameGUI extends JFrame {
             g.drawImage(getPacmanImage(), game.getPlayer().getPositionX() + PAC_PADDING, game.getPlayer().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
+            g.drawImage(getGhostImage(game.getBlinky(), blinkyImageDirection), game.getBlinky().getPositionX() + PAC_PADDING, game.getBlinky().getPositionY() + PAC_PADDING,
+                    (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
+                    null, null);
+            g.drawImage(getGhostImage(game.getInky(), inkyImageDirection), game.getInky().getPositionX() + PAC_PADDING, game.getInky().getPositionY() + PAC_PADDING,
+                    (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
+                    null, null);
+
+            g.drawImage(getGhostImage(game.getClyde(), clydeImageDirection), game.getClyde().getPositionX() + PAC_PADDING, game.getClyde().getPositionY() + PAC_PADDING,
+                    (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
+                    null, null);
+            g.drawImage(getGhostImage(game.getPinky(), pinkyImageDirection), game.getPinky().getPositionX() + PAC_PADDING, game.getPinky().getPositionY() + PAC_PADDING,
+                    (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
+                    null, null);
+
         }
 
         public Image getPacmanImage() {
@@ -196,6 +239,8 @@ public class GameGUI extends JFrame {
             }
             return imageClosed;
         }
+
+        public Image getGhostImage(Entity ghost, HashMap<String, Image> images) { return images.get(ghost.getHeading());}
 
         public void paintCell(Graphics g, int row, int col) {
             Cell cell = game.getPacmanMap().getCell(row, col);
