@@ -13,11 +13,12 @@ public class MainMenu extends JPanel {
     private JButton exit;
 
     public MainMenu(int width, int height) {
-        setLayout(new BorderLayout());
         setBackground(Color.BLACK);
+        setLayout(new BorderLayout());
+        setPreferredSize(new Dimension(width, (int) (height/1.5)));
 
         titlePanel = new JPanel();
-        titlePanel.setPreferredSize(new Dimension(width, height/2));
+        titlePanel.setPreferredSize(new Dimension(width, height/4));
         titlePanel.setLayout(new FlowLayout());
         titlePanel.setBackground(Color.BLACK);
 
@@ -27,7 +28,7 @@ public class MainMenu extends JPanel {
         titlePanel.add(title);
 
         buttonPanel = new JPanel();
-        buttonPanel.setPreferredSize(new Dimension(width, height/2));
+        buttonPanel.setPreferredSize(new Dimension(width, height/4));
         buttonPanel.setBackground(Color.BLACK);
 
         play = new JButton("Play");
@@ -36,7 +37,7 @@ public class MainMenu extends JPanel {
         play.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameState.state = GameState.PLAYING;
+                GameState.state = GameState.SELECT;
             }
         });
 

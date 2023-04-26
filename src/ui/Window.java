@@ -7,16 +7,18 @@ public class Window extends JFrame {
 
     private MainMenu mainMenu;
     private GameGUI gameGUI;
+    private MapSelection mapSelection;
 
     public Window() {
         mainMenu = new MainMenu(565, 677);
         gameGUI = new GameGUI();
+        mapSelection = new MapSelection(565, 677, gameGUI.game);
 
         loadMainMenu();
 
         setVisible(true);
         setSize(565, 677);
-        setBackground(Color.BLACK);
+        getContentPane().setBackground(Color.BLACK);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         repaint();
@@ -24,20 +26,38 @@ public class Window extends JFrame {
 
     public void loadMainMenu() {
         remove(gameGUI);
-        add(mainMenu);
-        pack();
         validate();
+
+        getContentPane().setLayout(new BorderLayout());
+
+        add(mainMenu, BorderLayout.SOUTH);
+        pack();
+
+        repaint();
+    }
+
+    public void loadMapSelection() {
+        remove(mainMenu);
+        validate();
+
+        setSize(565, 677);
+        getContentPane().setLayout(new BorderLayout());
+
+        add(mapSelection, BorderLayout.SOUTH);
+        pack();
         repaint();
     }
 
     public void loadGameGUI() {
-        remove(mainMenu);
+        remove(mapSelection);
+        validate();
+
+        setLayout(new BorderLayout());
         add(gameGUI);
         pack();
 
         startGame();
 
-        validate();
         repaint();
     }
 

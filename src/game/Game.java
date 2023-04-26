@@ -30,7 +30,6 @@ public class Game {
         CELL_SIZE = cellSize;
 
         pacmanMap = new Map(mapWidth, mapHeight);
-        pacmanMap.setDefaultMap("src/mapLayout/pacman_map.csv");
         player = new Entity(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed); //map1: 26, 45 / map2: 27, 29
         blinky = new Entity(11 * CELL_SIZE, 27 * CELL_SIZE, ghost_base_speed);
         inky = new Entity(32 * CELL_SIZE, 45 * CELL_SIZE, ghost_base_speed);
