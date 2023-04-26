@@ -7,7 +7,7 @@ import game.Map;
 import java.util.*;
 
 
-public class PinkyAi implements AI{
+public class PinkyAI implements AI{
     private final int targetChangeInterval;
     private ArrayList<ArrayList<Integer>> power = new ArrayList<ArrayList<Integer>>();
     private int currentTarget = 0;
@@ -19,7 +19,7 @@ public class PinkyAi implements AI{
     private int oldRow = 0;
     private String nextWay;
 
-    public PinkyAi(game.Map map){
+    public PinkyAI(game.Map map){
         this.targetChangeInterval = 20;
         rand = new Random();
         int index = 0;
