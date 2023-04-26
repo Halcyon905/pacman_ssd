@@ -15,6 +15,7 @@ public class Game {
     private Entity clyde;
     private Entity pinky;
     private HashMap<Entity, AI> ghostAI = new HashMap<Entity, AI>();
+    private int mapSelected = 0;
     private int mapHeight = 61;
     private int mapWidth = 55;
     private int lives = 3;
@@ -22,7 +23,6 @@ public class Game {
     private int gameState = 0;
     private int startX = 26;
     private int startY = 45;
-
     private double base_speed = 4;
     private double ghost_base_speed = 3;
 
@@ -30,15 +30,11 @@ public class Game {
         CELL_SIZE = cellSize;
 
         pacmanMap = new Map(mapWidth, mapHeight);
-        player = new Entity(26 * CELL_SIZE, 45 * CELL_SIZE, base_speed); //map1: 26, 45 / map2: 27, 29
-        blinky = new Entity(11 * CELL_SIZE, 27 * CELL_SIZE, ghost_base_speed);
-        inky = new Entity(32 * CELL_SIZE, 45 * CELL_SIZE, ghost_base_speed);
-        clyde = new Entity(26 * CELL_SIZE, 9 * CELL_SIZE, ghost_base_speed);
-        pinky = new Entity(26 * CELL_SIZE, 21 * CELL_SIZE, ghost_base_speed);
-        ghostAI.put(blinky, new BlinkyAI());
-        ghostAI.put(inky, new InkyAI());
-        ghostAI.put(clyde, new ClydeAI());
-        ghostAI.put(pinky, new PinkyAi(pacmanMap));
+        player = new Entity(base_speed); //map1: 26, 45 / map2: 27, 29
+        blinky = new Entity(ghost_base_speed);
+        inky = new Entity(ghost_base_speed);
+        clyde = new Entity(ghost_base_speed);
+        pinky = new Entity(ghost_base_speed);
     }
 
     public Entity getPlayer() {
@@ -49,8 +45,8 @@ public class Game {
     }
     public Entity getBlinky() { return blinky; }
     public Entity getInky() { return inky; }
-    public Entity getClyde() {return clyde; }
-    public Entity getPinky() {return pinky; }
+    public Entity getClyde() { return clyde; }
+    public Entity getPinky() { return pinky; }
 
     public int getLives() {
         return lives;
@@ -65,10 +61,45 @@ public class Game {
 
     public void start() {
         gameState = 1;
+
+        ghostAI.put(blinky, new BlinkyAI());
+        ghostAI.put(inky, new InkyAI());
+        ghostAI.put(clyde, new ClydeAI());
+        ghostAI.put(pinky, new PinkyAi(pacmanMap));
+
+        switch (mapSelected) {
+            case 1: {
+                player.headWest(26 * CELL_SIZE, 45 * CELL_SIZE);
+                blinky.headWest(26 * CELL_SIZE, 21 * CELL_SIZE);
+                inky.headEast(21 * CELL_SIZE, 26 * CELL_SIZE);
+                pinky.headEast(26 * CELL_SIZE, 26 * CELL_SIZE);
+                clyde.headWest(31 * CELL_SIZE, 26 * CELL_SIZE);
+                break;
+            }
+            case 2: {
+                player.headWest(27 * CELL_SIZE, 29 * CELL_SIZE);
+                blinky.headWest(26 * CELL_SIZE, 7 * CELL_SIZE);
+                inky.headEast(21 * CELL_SIZE, 2 * CELL_SIZE);
+                pinky.headEast(26 * CELL_SIZE, 2 * CELL_SIZE);
+                clyde.headWest(31 * CELL_SIZE, 2 * CELL_SIZE);
+                break;
+            }
+        }
     }
 
     public void clearScore() {
         score = 0;
+    }
+
+    public void reset(){
+        pacmanMap.replaceAllPellet();
+        player.headWest(startX * CELL_SIZE, startY * CELL_SIZE);
+        gameState = 0;
+    }
+
+    public void loadSelectedMap(String filePath, int index) {
+        pacmanMap.setDefaultMap(filePath);
+        mapSelected = index;
     }
 
     public void update() {
@@ -81,12 +112,6 @@ public class Game {
         if(pacmanMap.checkPelletOnMap()) {
             gameState = 2;
         }
-    }
-
-    public void reset(){
-        pacmanMap.replaceAllPellet();
-        player.headWest(startX * CELL_SIZE, startY * CELL_SIZE);
-        gameState = 0;
     }
 
     public void updateMap() {

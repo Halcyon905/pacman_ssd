@@ -10,7 +10,7 @@ public class Entity {
     private String heading;
     private double speed;
 
-    public Entity(int startX, int startY, double speed) {
+    public Entity(double speed) {
         int[] north = {-1, 0};
         direction.put("N", north);
         int[] south = {1, 0};
@@ -20,10 +20,8 @@ public class Entity {
         int[] west = {0, -1};
         direction.put("W", west);
 
-        positionX = startX;
-        positionY = startY;
-
-        headWest(startX, startY);
+        positionX = 0;
+        positionY = 0;
 
         this.speed = speed;
     }

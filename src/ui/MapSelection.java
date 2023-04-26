@@ -24,7 +24,7 @@ public class MapSelection extends JPanel {
         firstMap.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                game.getPacmanMap().setDefaultMap("src/mapLayout/pacman_map.csv");
+                game.loadSelectedMap("src/mapLayout/pacman_map.csv", 1);
                 GameState.state = GameState.PLAYING;
             }
         });
@@ -33,7 +33,7 @@ public class MapSelection extends JPanel {
         secondMap.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                game.getPacmanMap().setDefaultMap("src/mapLayout/pacman_map_2.csv");
+                game.loadSelectedMap("src/mapLayout/pacman_map_2.csv", 2);
                 GameState.state = GameState.PLAYING;
             }
         });
