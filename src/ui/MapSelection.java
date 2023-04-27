@@ -11,6 +11,7 @@ public class MapSelection extends JPanel {
 
     private JButton firstMap;
     private JButton secondMap;
+    private JButton thirdMap;
     private Game game;
 
     public MapSelection(int width, int height, Game game) {
@@ -38,7 +39,18 @@ public class MapSelection extends JPanel {
             }
         });
 
+        thirdMap = new JButton("map 3");
+        thirdMap.setSize(new Dimension(50, 50));
+        thirdMap.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.loadSelectedMap("src/mapLayout/pacman_map_3.csv", 3);
+                GameState.state = GameState.PLAYING;
+            }
+        });
+
         add(firstMap);
         add(secondMap);
+        add(thirdMap);
     }
 }
