@@ -1,9 +1,8 @@
-package game;
+package game.ai;
 
 import entity.Entity;
+import game.Game;
 
-import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 
 public class ClydeAI implements AI{

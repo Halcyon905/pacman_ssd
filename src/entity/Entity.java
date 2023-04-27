@@ -8,9 +8,8 @@ public class Entity {
     private int positionX;
     private int positionY;
     private String heading;
-    private double speed;
 
-    public Entity(int startX, int startY, double speed) {
+    public Entity() {
         int[] north = {-1, 0};
         direction.put("N", north);
         int[] south = {1, 0};
@@ -20,12 +19,8 @@ public class Entity {
         int[] west = {0, -1};
         direction.put("W", west);
 
-        positionX = startX;
-        positionY = startY;
-
-        headWest(startX, startY);
-
-        this.speed = speed;
+        positionX = 0;
+        positionY = 0;
     }
 
     public int getPositionX() {
@@ -60,7 +55,7 @@ public class Entity {
         positionX = posX;
         positionY = posY;
     }
-    public void move() {
+    public void move(int speed) {
         int[] movement = direction.get(heading);
         positionY += movement[0] * speed;
         positionX += movement[1] * speed;
