@@ -46,16 +46,21 @@ public class Cell {
     public void setPellet() {
         pellet = 1;
         pelletStatus = true;
+        wall = false;
+        turning = false;
     }
 
     public void setPowerPellet() {
         pellet = 2;
         pelletStatus = true;
+        wall = false;
+        turning = false;
     }
 
     public void buildWall() {
         wall = true;
         pellet = 0;
+        pelletStatus = false;
     }
 
     public void setEmpty() {

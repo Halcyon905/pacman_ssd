@@ -1,91 +1,49 @@
+package ui;
+
 import entity.Entity;
 import game.Cell;
 import game.Game;
+import game.PowerPelletState;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
-public class GameGUI extends JFrame {
+public class GameGUI extends JPanel {
     private static final int CELL_SIZE = 10;
     private int mapHeight = 61;
     private int mapWidth = 55;
-    private boolean toggleAnimation = false;
-    private Game game;
-    private GridUI gridUI;
-    private PlayerInfo playerInfo;
+    public boolean toggleAnimation = false;
+    public Game game;
+    public GridUI gridUI;
+    public PlayerInfo playerInfo;
 
     public GameGUI() {
         setLayout(new BorderLayout());
-        getContentPane().setBackground(Color.BLACK);
+        setBackground(Color.BLACK);
+        setPreferredSize(new Dimension(mapWidth * CELL_SIZE, mapHeight * CELL_SIZE + 30));
 
         game = new Game(CELL_SIZE);
 
         gridUI = new GridUI();
         playerInfo = new PlayerInfo(game.getLives(), mapWidth * CELL_SIZE);
 
-        setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        startGame();
-    }
-
-    public void startGame() {
         add(playerInfo, BorderLayout.NORTH);
         add(gridUI, BorderLayout.SOUTH);
-        pack();
+    }
 
-        while(true) {
-            Thread gameThread = new Thread() {
-                @Override
-                public void run() {
-                    super.run();
-                    double timeStamp = System.currentTimeMillis();
-                    toggleAnimation = false;
-                    game.start();
+    public void enableControls() {
+        gridUI.requestFocus();
+    }
 
-                    for(int i = 3; i > 0; i--) {
-                        try {
-                            playerInfo.updateScore(i);
-                            sleep(1000);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    gridUI.requestFocus();
-
-                    while(true) {
-                        game.update();
-                        playerInfo.updateScore(game.getScore());
-                        playerInfo.updateLives(game.getLives());
-                        if(System.currentTimeMillis() - timeStamp >= 210) {
-                            timeStamp = System.currentTimeMillis();
-                            toggleAnimation = !toggleAnimation;
-                        }
-                        repaint();
-                        if(game.getGameState() == 2 || game.getGameState() == 3) {
-                            break;
-                        }
-                        try {
-                            sleep(42);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            };
-            gameThread.run();
-            if(game.getGameState() == 3) {
-                break;
-            }
-            game.reset();
-            playerInfo.requestFocus();
-        }
+    public void disableControls() {
+        playerInfo.requestFocus();
     }
 
     private class GridUI extends JPanel {
         private static final int PELLET_SIZE = 6;
-        private static final double TURNING_WINDOW = 3.25;
+        private static final double TURNING_WINDOW = 3.65;
         private static final int PAC_PADDING = 3;
         private static final int PELLET_PADDING = 2;
         private HashMap<String, Image> imageDirection = new HashMap<String, Image>();
@@ -93,8 +51,8 @@ public class GameGUI extends JFrame {
         private HashMap<String, Image> clydeImageDirection = new HashMap<String, Image>();
         private HashMap<String, Image> pinkyImageDirection = new HashMap<String, Image>();
         private HashMap<String, Image> inkyImageDirection = new HashMap<>();
+        private Image ghostScared;
         private Image imageClosed;
-        private Image inkyImage;
 
         public GridUI() {
             setPreferredSize(new Dimension(mapWidth * CELL_SIZE, mapHeight * CELL_SIZE));
@@ -123,6 +81,8 @@ public class GameGUI extends JFrame {
             inkyImageDirection.put("S", new ImageIcon("img/inky/inky_south.png").getImage());
             inkyImageDirection.put("W", new ImageIcon("img/inky/inky_west.png").getImage());
             inkyImageDirection.put("E", new ImageIcon("img/inky/inky_east.png").getImage());
+
+            ghostScared = new ImageIcon("img/ghost_scared.png").getImage();
 
             getInputMap().put(KeyStroke.getKeyStroke("W"), "w pressed");
             getInputMap().put(KeyStroke.getKeyStroke("A"), "a pressed");
@@ -217,13 +177,13 @@ public class GameGUI extends JFrame {
             g.drawImage(getPacmanImage(), game.getPlayer().getPositionX() + PAC_PADDING, game.getPlayer().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
+
             g.drawImage(getGhostImage(game.getBlinky(), blinkyImageDirection), game.getBlinky().getPositionX() + PAC_PADDING, game.getBlinky().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
             g.drawImage(getGhostImage(game.getInky(), inkyImageDirection), game.getInky().getPositionX() + PAC_PADDING, game.getInky().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
-
             g.drawImage(getGhostImage(game.getClyde(), clydeImageDirection), game.getClyde().getPositionX() + PAC_PADDING, game.getClyde().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
@@ -240,7 +200,12 @@ public class GameGUI extends JFrame {
             return imageClosed;
         }
 
-        public Image getGhostImage(Entity ghost, HashMap<String, Image> images) { return images.get(ghost.getHeading());}
+        public Image getGhostImage(Entity ghost, HashMap<String, Image> images) {
+            if(PowerPelletState.STATE) {
+                return ghostScared;
+            }
+            return images.get(ghost.getHeading());
+        }
 
         public void paintCell(Graphics g, int row, int col) {
             Cell cell = game.getPacmanMap().getCell(row, col);
@@ -258,9 +223,5 @@ public class GameGUI extends JFrame {
                 g.fillOval(x + PELLET_PADDING - 3, y + PELLET_PADDING - 3, PELLET_SIZE + 3, PELLET_SIZE + 3);
             }
         }
-    }
-
-    public static void main(String[] args) {
-        new GameGUI();
     }
 }
