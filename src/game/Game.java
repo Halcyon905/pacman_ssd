@@ -85,6 +85,14 @@ public class Game {
                 clyde.headWest(31 * CELL_SIZE, 2 * CELL_SIZE);
                 break;
             }
+            case 3: {
+                player.headWest(26 * CELL_SIZE, 57 * CELL_SIZE);
+                blinky.headWest(26 * CELL_SIZE, 19 * CELL_SIZE);
+                inky.headEast(26 * CELL_SIZE, 25 * CELL_SIZE);
+                pinky.headEast(26 * CELL_SIZE, 37 * CELL_SIZE);
+                clyde.headWest(26 * CELL_SIZE, 31 * CELL_SIZE);
+                break;
+            }
         }
     }
 
