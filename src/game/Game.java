@@ -60,6 +60,8 @@ public class Game {
     }
     public int getCellSize() {return CELL_SIZE; }
 
+    public void reduceLive(){ lives -= 1; }
+
     public void start() {
         gameState = 1;
 
@@ -68,9 +70,36 @@ public class Game {
         ghostAI.put(clyde, new ClydeAI());
         ghostAI.put(pinky, new PinkyAI(pacmanMap));
 
+        resetPlayer();
+        resetGhost();
+    }
+
+    public void clearScore() {
+        score = 0;
+    }
+
+    public void resetLives() { lives = 3; }
+
+    public void resetPlayer() {
         switch (mapSelected) {
             case 1: {
                 player.headWest(26 * CELL_SIZE, 45 * CELL_SIZE);
+                break;
+            }
+            case 2: {
+                player.headWest(27 * CELL_SIZE, 29 * CELL_SIZE);
+                break;
+            }
+            case 3: {
+                player.headWest(26 * CELL_SIZE, 57 * CELL_SIZE);
+                break;
+            }
+        }
+    }
+
+    public void resetGhost() {
+        switch (mapSelected) {
+            case 1: {
                 blinky.headWest(26 * CELL_SIZE, 21 * CELL_SIZE);
                 inky.headEast(21 * CELL_SIZE, 26 * CELL_SIZE);
                 pinky.headEast(26 * CELL_SIZE, 26 * CELL_SIZE);
@@ -78,7 +107,6 @@ public class Game {
                 break;
             }
             case 2: {
-                player.headWest(27 * CELL_SIZE, 29 * CELL_SIZE);
                 blinky.headWest(26 * CELL_SIZE, 7 * CELL_SIZE);
                 inky.headEast(21 * CELL_SIZE, 2 * CELL_SIZE);
                 pinky.headEast(26 * CELL_SIZE, 2 * CELL_SIZE);
@@ -86,7 +114,6 @@ public class Game {
                 break;
             }
             case 3: {
-                player.headWest(26 * CELL_SIZE, 57 * CELL_SIZE);
                 blinky.headWest(26 * CELL_SIZE, 19 * CELL_SIZE);
                 inky.headEast(26 * CELL_SIZE, 25 * CELL_SIZE);
                 pinky.headEast(26 * CELL_SIZE, 37 * CELL_SIZE);
@@ -96,14 +123,18 @@ public class Game {
         }
     }
 
-    public void clearScore() {
-        score = 0;
-    }
-
-    public void reset(){
-        pacmanMap.replaceAllPellet();
-        player.headWest(startX * CELL_SIZE, startY * CELL_SIZE);
-        gameState = 0;
+    public void reset(int gameState){
+        if (gameState == 0){
+            pacmanMap.replaceAllPellet();
+        }
+        if (lives == 0){
+            pacmanMap.replaceAllPellet();
+            resetLives();
+            clearScore();
+        }
+        resetPlayer();
+        resetGhost();
+        this.gameState = gameState;
     }
 
     public void loadSelectedMap(String filePath, int index) {
@@ -118,12 +149,14 @@ public class Game {
         }
         updateMap();
         updatePlayer();
+
         updateGhost(blinky);
         updateGhost(clyde);
         updateGhost(inky);
         updateGhost(pinky);
+
         if(pacmanMap.checkPelletOnMap()) {
-            gameState = 2;
+            reset(0); //not sure what gameState do punn use 2 here
         }
     }
 
@@ -141,6 +174,7 @@ public class Game {
     }
 
     public void updateGhost(Entity ghost) {
+        checkHit(ghost);
         if (pacmanMap.getCell(
                 ghost.getPositionY() / CELL_SIZE,
                 ghost.getPositionX() / CELL_SIZE).isTurning()){
@@ -337,6 +371,14 @@ public class Game {
                     !pacmanMap.getCell(row + 2, col).getWall()) {
                 player.move(base_speed);
             }
+        }
+    }
+
+    private void checkHit(Entity ghost){
+        Entity check = PowerPelletState.checkCollision(player, ghost, this);
+        if(check == player){
+            lives--;
+            reset(5);
         }
     }
 }
