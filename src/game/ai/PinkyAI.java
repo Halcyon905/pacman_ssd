@@ -1,11 +1,13 @@
-package game;
+package game.ai;
 
 import entity.Entity;
+import game.Game;
+import game.Map;
 
 import java.util.*;
 
 
-public class PinkyAi implements AI{
+public class PinkyAI implements AI{
     private final int targetChangeInterval;
     private ArrayList<ArrayList<Integer>> power = new ArrayList<ArrayList<Integer>>();
     private int currentTarget = 0;
@@ -17,7 +19,7 @@ public class PinkyAi implements AI{
     private int oldRow = 0;
     private String nextWay;
 
-    public PinkyAi(Map map){
+    public PinkyAI(game.Map map){
         this.targetChangeInterval = 20;
         rand = new Random();
         int index = 0;
@@ -67,13 +69,20 @@ public class PinkyAi implements AI{
         }
 
         CellNode nextMove = bfs(game.getPacmanMap(), ghostRow, ghostCol, targetRow, targetCol);
-        if (nextMove.row > ghostRow){
-            return "S";
-        } else if (nextMove.row < ghostRow) {
-            return "N";
-        } else if (nextMove.col > ghostCol) {
-            return "E";
-        } else {return "W";}
+        if (nextMove != null) {
+            if (nextMove.row > ghostRow){
+                return "S";
+            } else if (nextMove.row < ghostRow) {
+                return "N";
+            } else if (nextMove.col > ghostCol) {
+                return "E";
+            } else {return "W";}
+        } else {
+            Random rand = new Random();
+            String[] direction = {"N", "E", "W", "S"};
+            int randomIndex = rand.nextInt(direction.length);
+            return direction[randomIndex];
+        }
     }
     private boolean checkWall(Entity ghost, String direction, game.Map map, Game game){
         int col = ghost.getPositionX() / game.getCellSize();
