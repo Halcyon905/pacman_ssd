@@ -8,11 +8,13 @@ public class Window extends JFrame {
     private MainMenu mainMenu;
     private GameGUI gameGUI;
     private MapSelection mapSelection;
+    private GameOver gameOver;
 
     public Window() {
         mainMenu = new MainMenu(565, 677);
         gameGUI = new GameGUI();
         mapSelection = new MapSelection(565, 677, gameGUI.game);
+        gameOver = new GameOver(565, 677);
 
         loadMainMenu();
 
@@ -26,6 +28,7 @@ public class Window extends JFrame {
 
     public void loadMainMenu() {
         remove(gameGUI);
+        remove(gameOver);
         validate();
 
         getContentPane().setLayout(new BorderLayout());
@@ -61,6 +64,18 @@ public class Window extends JFrame {
         repaint();
     }
 
+    public void loadGameOver() {
+        remove(gameGUI);
+        validate();
+
+        getContentPane().setLayout(new BorderLayout());
+
+        add(gameOver, BorderLayout.SOUTH);
+        pack();
+
+        repaint();
+    }
+
     public void startGame() {
         Thread gameThread = new Thread() {
             @Override
@@ -89,8 +104,8 @@ public class Window extends JFrame {
                         gameGUI.toggleAnimation = !gameGUI.toggleAnimation;
                     }
                     repaint();
-                    if(gameGUI.game.getGameState() == 2 || gameGUI.game.getGameState() == 3) {
-                        break;
+                    if(gameGUI.game.getGameState() == 3) {
+                        GameState.state = GameState.GAMEOVER;
                     }
                     try {
                         sleep(42);

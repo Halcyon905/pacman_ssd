@@ -128,9 +128,10 @@ public class Game {
             pacmanMap.replaceAllPellet();
         }
         if (lives == 0){
-            pacmanMap.replaceAllPellet();
             resetLives();
             clearScore();
+            this.gameState = 3;
+            return;
         }
         resetPlayer();
         resetGhost();
@@ -156,7 +157,7 @@ public class Game {
         updateGhost(pinky);
 
         if(pacmanMap.checkPelletOnMap()) {
-            reset(0); //not sure what gameState do punn use 2 here
+            reset(2); //not sure what gameState do punn use 2 here
         }
     }
 
@@ -378,7 +379,7 @@ public class Game {
         Entity check = PowerPelletState.checkCollision(player, ghost, this);
         if(check == player){
             lives--;
-            reset(5);
+            reset(4);
         }
     }
 }

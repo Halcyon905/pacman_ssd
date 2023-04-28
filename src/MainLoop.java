@@ -26,6 +26,14 @@ public class MainLoop {
                     window.loadMapSelection();
                     currentState = GameState.state;
                 }
+                else if(GameState.state == GameState.MENU) {
+                    window.loadMainMenu();
+                    currentState = GameState.state;
+                }
+                else if(GameState.state == GameState.GAMEOVER) {
+                    window.loadGameOver();
+                    currentState = GameState.state;
+                }
                 else if(GameState.state == GameState.EXIT) {
                     window.dispose();
                     break;
