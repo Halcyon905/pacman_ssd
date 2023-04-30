@@ -15,6 +15,8 @@ public class Map {
 
     private int width;
     private int height;
+    private int spawnRow;
+    private int spawnCol;
 
     public Map(int width, int height) {
         this.width = width;
@@ -29,6 +31,14 @@ public class Map {
             return null;
         }
         return cellArray[row][col];
+    }
+
+    public int getSpawnRow(){
+        return spawnRow;
+    }
+
+    public int getSpawnCol() {
+        return spawnCol;
     }
 
     private void initCells() {
@@ -62,7 +72,11 @@ public class Map {
                     else if(tempStr.equals("4")) {
                         cellArray[row][col].setTurning();
                     }
-                    else {
+                    else if (tempStr.equals("6")) {
+                        cellArray[row][col].setSpawn();
+                        spawnRow = row;
+                        spawnCol = col;
+                    } else {
                         cellArray[row][col].setEmpty();
                     }
                     col++;

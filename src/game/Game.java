@@ -101,16 +101,16 @@ public class Game {
         switch (mapSelected) {
             case 1: {
                 blinky.headWest(26 * CELL_SIZE, 21 * CELL_SIZE);
-                inky.headEast(21 * CELL_SIZE, 26 * CELL_SIZE);
+                inky.headEast(22 * CELL_SIZE, 26 * CELL_SIZE);
                 pinky.headEast(26 * CELL_SIZE, 26 * CELL_SIZE);
-                clyde.headWest(31 * CELL_SIZE, 26 * CELL_SIZE);
+                clyde.headWest(30 * CELL_SIZE, 26 * CELL_SIZE);
                 break;
             }
             case 2: {
                 blinky.headWest(26 * CELL_SIZE, 7 * CELL_SIZE);
-                inky.headEast(21 * CELL_SIZE, 2 * CELL_SIZE);
+                inky.headEast(22 * CELL_SIZE, 2 * CELL_SIZE);
                 pinky.headEast(26 * CELL_SIZE, 2 * CELL_SIZE);
-                clyde.headWest(31 * CELL_SIZE, 2 * CELL_SIZE);
+                clyde.headWest(30 * CELL_SIZE, 2 * CELL_SIZE);
                 break;
             }
             case 3: {
@@ -176,6 +176,11 @@ public class Game {
 
     public void updateGhost(Entity ghost) {
         checkHit(ghost);
+        if (ghost.getPositionX() / CELL_SIZE == pacmanMap.getSpawnCol()
+                && ghost.getPositionY() / CELL_SIZE == pacmanMap.getSpawnRow()){
+            ghostAI.get(ghost).setState(0);
+            ghostAI.get(ghost).setSlow(0);
+        }
         if (pacmanMap.getCell(
                 ghost.getPositionY() / CELL_SIZE,
                 ghost.getPositionX() / CELL_SIZE).isTurning()){
@@ -228,9 +233,10 @@ public class Game {
             return;
         }
 
-        int slow = 0;
-        if(PowerPelletState.STATE) {
-            slow = 1;
+        if(PowerPelletState.STATE && ghostAI.get(ghost).getSlow() >= 0) {
+            ghostAI.get(ghost).setSlow(1);
+        } else if (!PowerPelletState.STATE) {
+            ghostAI.get(ghost).setSlow(0);
         }
 
         // preventing the ghost from moving through the walls
@@ -239,7 +245,7 @@ public class Game {
             int row = (int) ((ghost.getPositionY() - ghost_base_speed) / CELL_SIZE);
             if (!pacmanMap.getCell(row, col).getWall() &&
                     !pacmanMap.getCell(row, col + 2).getWall()) {
-                ghost.move(ghost_base_speed - slow);
+                ghost.move(ghost_base_speed - ghostAI.get(ghost).getSlow());
             }
             return;
         }
@@ -248,7 +254,7 @@ public class Game {
             int row = (int) ((ghost.getPositionY() + (CELL_SIZE * 3)) / CELL_SIZE);
             if (!pacmanMap.getCell(row, col).getWall() &&
                     !pacmanMap.getCell(row, col + 2).getWall()) {
-                ghost.move(ghost_base_speed - slow);
+                ghost.move(ghost_base_speed - ghostAI.get(ghost).getSlow());
             }
             return;
         }
@@ -258,7 +264,7 @@ public class Game {
             if (!pacmanMap.getCell(row, col).getWall() &&
                     // checking for right edge or right teleporting gate
                     !pacmanMap.getCell(row + 2, col).getWall()) {
-                ghost.move(ghost_base_speed - slow);
+                ghost.move(ghost_base_speed - ghostAI.get(ghost).getSlow());
             }
             return;
         }
@@ -267,7 +273,7 @@ public class Game {
             int row = (int) (ghost.getPositionY() / CELL_SIZE);
             if (!pacmanMap.getCell(row, col).getWall() &&
                     !pacmanMap.getCell(row + 2, col).getWall()) {
-                ghost.move(ghost_base_speed - slow);
+                ghost.move(ghost_base_speed - ghostAI.get(ghost).getSlow());
             }
         }
     }
@@ -380,6 +386,10 @@ public class Game {
         if(check == player){
             lives--;
             reset(4);
+        } else if (check == ghost) {
+            System.out.println( ghostAI.get(ghost).getState());
+            ghostAI.get(ghost).setState(1);
+            ghostAI.get(ghost).setSlow(-5);
         }
     }
 }

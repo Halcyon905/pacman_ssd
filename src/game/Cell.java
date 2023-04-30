@@ -5,11 +5,13 @@ public class Cell {
     private int pellet;
     private boolean pelletStatus;
     private boolean turning;
+    private boolean spawn;
 
     public Cell() {
         wall = false;
         turning = false;
         pelletStatus = false;
+        spawn = false;
         pellet = 0;
     }
 
@@ -29,6 +31,8 @@ public class Cell {
         return turning;
     }
 
+    public boolean isSpawn() { return spawn; }
+
     public void eaten() {
         if(pelletStatus) {
             pelletStatus = false;
@@ -43,11 +47,14 @@ public class Cell {
         turning = true;
     }
 
+    public void setSpawn() { spawn = true; }
+
     public void setPellet() {
         pellet = 1;
         pelletStatus = true;
         wall = false;
         turning = false;
+        spawn = false;
     }
 
     public void setPowerPellet() {
@@ -55,12 +62,14 @@ public class Cell {
         pelletStatus = true;
         wall = false;
         turning = false;
+        spawn = false;
     }
 
     public void buildWall() {
         wall = true;
         pellet = 0;
         pelletStatus = false;
+        spawn = false;
     }
 
     public void setEmpty() {
@@ -68,5 +77,6 @@ public class Cell {
         turning = false;
         pelletStatus = false;
         pellet = 0;
+        spawn = false;
     }
 }
