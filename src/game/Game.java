@@ -397,6 +397,7 @@ public class Game {
             lives--;
             reset(4);
         } else if (check == ghost) {
+            score += 200;
             ghostAI.get(ghost).setState(2);
             ghostAI.get(ghost).setSlow(-5);
         }
