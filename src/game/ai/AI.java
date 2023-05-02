@@ -30,9 +30,9 @@ public class AI {
 
     public String getNextMove(Entity ghost, Entity pacman, Game game) {
         String nextMove = null;
-        if (state == 0){
+        if (state < 2){
             nextMove = moveAI(ghost, pacman, game);
-        } else if (state == 1) {
+        } else if (state == 2) {
             nextMove = backSpawn(ghost, game);
         }
         return nextMove;

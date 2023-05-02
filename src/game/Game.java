@@ -48,6 +48,7 @@ public class Game {
     public Entity getInky() { return inky; }
     public Entity getClyde() { return clyde; }
     public Entity getPinky() { return pinky; }
+    public HashMap<Entity, AI> getGhostAI() { return ghostAI; }
 
     public int getLives() {
         return lives;
@@ -143,9 +144,16 @@ public class Game {
         mapSelected = index;
     }
 
+    public void setAllGhostState(int state){
+        ghostAI.get(blinky).setState(state);
+        ghostAI.get(inky).setState(state);
+        ghostAI.get(clyde).setState(state);
+        ghostAI.get(pinky).setState(state);
+    }
+
     public void update() {
         if(powerPelletTimer != 0 && System.currentTimeMillis() - powerPelletTimer >= 10000) {
-            PowerPelletState.STATE = false;
+            setAllGhostState(0);
             powerPelletTimer = 0;
         }
         updateMap();
@@ -170,14 +178,16 @@ public class Game {
         else if(pellet == 2) {
             score += 50;
             powerPelletTimer = System.currentTimeMillis();
-            PowerPelletState.STATE = true;
+            setAllGhostState(1);
         }
     }
 
     public void updateGhost(Entity ghost) {
         checkHit(ghost);
-        if (ghost.getPositionX() / CELL_SIZE == pacmanMap.getSpawnCol()
-                && ghost.getPositionY() / CELL_SIZE == pacmanMap.getSpawnRow()){
+        if (pacmanMap.getCell(
+                ghost.getPositionY() / CELL_SIZE,
+                ghost.getPositionX() / CELL_SIZE).isSpawn()
+                && ghostAI.get(ghost).getState() == 2){
             ghostAI.get(ghost).setState(0);
             ghostAI.get(ghost).setSlow(0);
         }
@@ -233,9 +243,9 @@ public class Game {
             return;
         }
 
-        if(PowerPelletState.STATE && ghostAI.get(ghost).getSlow() >= 0) {
+        if(ghostAI.get(ghost).getState() == 1) {
             ghostAI.get(ghost).setSlow(1);
-        } else if (!PowerPelletState.STATE) {
+        } else if (ghostAI.get(ghost).getState() == 0) {
             ghostAI.get(ghost).setSlow(0);
         }
 
@@ -387,8 +397,7 @@ public class Game {
             lives--;
             reset(4);
         } else if (check == ghost) {
-            System.out.println( ghostAI.get(ghost).getState());
-            ghostAI.get(ghost).setState(1);
+            ghostAI.get(ghost).setState(2);
             ghostAI.get(ghost).setSlow(-5);
         }
     }
