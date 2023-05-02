@@ -6,7 +6,6 @@ import game.Map;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Stack;
 
 public class AI {
     private int state = 0;
@@ -51,7 +50,6 @@ public class AI {
 
         CellNode nextMove = bfs(game.getPacmanMap(), ghostRow, ghostCol, spawnRow, spawnCol);
         if (nextMove != null) {
-            System.out.println(spawnRow + "-" + spawnCol);
             if (nextMove.row > ghostRow){
                 return "S";
             } else if (nextMove.row < ghostRow) {
