@@ -5,7 +5,7 @@ import game.Game;
 
 import java.util.Random;
 
-public class ClydeAI implements AI{
+public class ClydeAI extends AI{
     private String nextWay = "";
     private int oldCol = 0;
     private int oldRow = 0;

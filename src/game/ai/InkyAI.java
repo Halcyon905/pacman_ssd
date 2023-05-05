@@ -8,7 +8,7 @@ import game.Game;
 import game.Map;
 
 
-public class InkyAI implements AI{
+public class InkyAI extends AI{
     private Entity currentTarget;
     private final int targetChangeInterval;
     private int updateCounter;
@@ -57,79 +57,5 @@ public class InkyAI implements AI{
             int randomIndex = rand.nextInt(direction.length);
             return direction[randomIndex];
         }
-    }
-
-
-    private static class CellNode {
-        int row;
-        int col;
-        CellNode previous;
-
-        CellNode(int row, int col, CellNode previous){
-            this.row = row;
-            this.col = col;
-            this.previous = previous;
-        }
-    }
-
-    private CellNode bfs(Map map, int startRow, int startCol, int destRow, int destCol){
-        Queue<CellNode> q = new LinkedList<>();
-        Boolean[][] seen = new Boolean[map.getHeight()][map.getWidth()];
-        // mark all cell as unvisited
-        for (int mapRow = 0; mapRow < map.getHeight(); mapRow++){
-            for (int mapCol=0; mapCol < map.getWidth(); mapCol++){
-                seen[mapRow][mapCol] = false;
-            }
-        }
-        CellNode startCellNode = new CellNode(startRow, startCol, null);
-        q.add(startCellNode);
-        seen[startCellNode.row][startCellNode.col] = true;
-
-        while (!q.isEmpty()){
-            CellNode v = q.peek();
-            q.remove();
-
-            // check if ghost is close to other ghost
-            int rowDiff = Math.abs(v.row - destRow);
-            int colDiff = Math.abs(v.col - destCol);
-            if (rowDiff <= 1 && colDiff <= 1) {
-                if (!map.getCell(v.row, v.col).getWall() && !map.getCell(destRow, destCol).getWall()) {
-                    // back track to get the nextMove from the path
-                    CellNode nextMove = null;
-                    while (v.previous != null) {
-                        nextMove = v;
-                        v = v.previous;
-                    }
-                    return nextMove;
-                }
-            }
-
-            int [][] moveVariation = {{-1, 0}, {0, 3}, {3, 0}, {0, -1}};
-
-            for (int moveIndex=0; moveIndex<4; moveIndex++){
-                int possibleRow = v.row + moveVariation[moveIndex][0];
-                int possibleCol = v.col + moveVariation[moveIndex][1];
-                if (possibleRow >= 0 && possibleRow < map.getHeight() &&
-                        possibleCol >= 0 && possibleCol < map.getWidth() &&
-                        !seen[possibleRow][possibleCol] && !map.getCell(possibleRow, possibleCol).getWall()){
-                    if (possibleRow < v.row && map.getCell(v.row-1, v.col).getWall()){
-                        continue;
-                    }
-                    if (possibleRow > v.row && map.getCell(v.row+1, v.col).getWall()){
-                        continue;
-                    }
-                    if (possibleCol < v.col && map.getCell(v.row, v.col-1).getWall()){
-                        continue;
-                    }
-                    if (possibleCol > v.col && map.getCell(v.row, v.col+1).getWall()){
-                        continue;
-                    }
-                    CellNode u = new CellNode(possibleRow, possibleCol, v);
-                    q.add(u);
-                    seen[u.row][u.col] = true;
-                }
-            }
-        }
-        return null;
     }
 }

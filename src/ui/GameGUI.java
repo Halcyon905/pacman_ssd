@@ -51,6 +51,7 @@ public class GameGUI extends JPanel {
         private HashMap<String, Image> clydeImageDirection = new HashMap<String, Image>();
         private HashMap<String, Image> pinkyImageDirection = new HashMap<String, Image>();
         private HashMap<String, Image> inkyImageDirection = new HashMap<>();
+        private HashMap<String, Image> backImageDirection = new HashMap<>();
         private Image ghostScared;
         private Image imageClosed;
 
@@ -81,6 +82,11 @@ public class GameGUI extends JPanel {
             inkyImageDirection.put("S", new ImageIcon("img/inky/inky_south.png").getImage());
             inkyImageDirection.put("W", new ImageIcon("img/inky/inky_west.png").getImage());
             inkyImageDirection.put("E", new ImageIcon("img/inky/inky_east.png").getImage());
+
+            backImageDirection.put("N", new ImageIcon("img/back_spawn/back_north.png").getImage());
+            backImageDirection.put("S", new ImageIcon("img/back_spawn/back_south.png").getImage());
+            backImageDirection.put("W", new ImageIcon("img/back_spawn/back_west.png").getImage());
+            backImageDirection.put("E", new ImageIcon("img/back_spawn/back_east.png").getImage());
 
             ghostScared = new ImageIcon("img/ghost_scared.png").getImage();
 
@@ -178,16 +184,16 @@ public class GameGUI extends JPanel {
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
 
-            g.drawImage(getGhostImage(game.getBlinky(), blinkyImageDirection), game.getBlinky().getPositionX() + PAC_PADDING, game.getBlinky().getPositionY() + PAC_PADDING,
+            g.drawImage(getGhostImage(game.getBlinky(), blinkyImageDirection, game), game.getBlinky().getPositionX() + PAC_PADDING, game.getBlinky().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
-            g.drawImage(getGhostImage(game.getInky(), inkyImageDirection), game.getInky().getPositionX() + PAC_PADDING, game.getInky().getPositionY() + PAC_PADDING,
+            g.drawImage(getGhostImage(game.getInky(), inkyImageDirection, game), game.getInky().getPositionX() + PAC_PADDING, game.getInky().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
-            g.drawImage(getGhostImage(game.getClyde(), clydeImageDirection), game.getClyde().getPositionX() + PAC_PADDING, game.getClyde().getPositionY() + PAC_PADDING,
+            g.drawImage(getGhostImage(game.getClyde(), clydeImageDirection, game), game.getClyde().getPositionX() + PAC_PADDING, game.getClyde().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
-            g.drawImage(getGhostImage(game.getPinky(), pinkyImageDirection), game.getPinky().getPositionX() + PAC_PADDING, game.getPinky().getPositionY() + PAC_PADDING,
+            g.drawImage(getGhostImage(game.getPinky(), pinkyImageDirection, game), game.getPinky().getPositionX() + PAC_PADDING, game.getPinky().getPositionY() + PAC_PADDING,
                     (CELL_SIZE * 3) - (PAC_PADDING * 2), (CELL_SIZE * 3) - (PAC_PADDING * 2),
                     null, null);
 
@@ -200,9 +206,11 @@ public class GameGUI extends JPanel {
             return imageClosed;
         }
 
-        public Image getGhostImage(Entity ghost, HashMap<String, Image> images) {
-            if(PowerPelletState.STATE) {
+        public Image getGhostImage(Entity ghost, HashMap<String, Image> images, Game game) {
+            if(game.getGhostAI().get(ghost).getState() == 1) {
                 return ghostScared;
+            } else if (game.getGhostAI().get(ghost).getState() == 2) {
+                return backImageDirection.get(ghost.getHeading());
             }
             return images.get(ghost.getHeading());
         }
