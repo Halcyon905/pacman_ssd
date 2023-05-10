@@ -393,7 +393,7 @@ public class Game {
         } else if (check == ghost) {
             score += 200;
             ghostAI.get(ghost).setState(2);
-            ghostAI.get(ghost).setSlow(-6);
+            ghostAI.get(ghost).setSlow(-5);
         }
     }
 }
