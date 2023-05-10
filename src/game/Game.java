@@ -137,6 +137,7 @@ public class Game {
         resetPlayer();
         resetGhost();
         this.gameState = gameState;
+        setAllGhostState(0);
     }
 
     public void loadSelectedMap(String filePath, int index) {
