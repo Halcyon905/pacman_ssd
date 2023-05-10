@@ -3,6 +3,7 @@ package game;
 import entity.Entity;
 import game.ai.*;
 
+import javax.lang.model.type.NullType;
 import java.util.HashMap;
 
 public class Game {
@@ -65,10 +66,12 @@ public class Game {
     public void start() {
         gameState = 1;
 
-        ghostAI.put(blinky, new BlinkyAI());
-        ghostAI.put(inky, new InkyAI());
-        ghostAI.put(clyde, new ClydeAI());
-        ghostAI.put(pinky, new PinkyAI(pacmanMap));
+        if(getGhostAI().get(blinky) == null){
+            ghostAI.put(blinky, new BlinkyAI());
+            ghostAI.put(inky, new InkyAI());
+            ghostAI.put(clyde, new ClydeAI());
+            ghostAI.put(pinky, new PinkyAI(pacmanMap));
+        }
 
         resetPlayer();
         resetGhost();
@@ -116,19 +119,16 @@ public class Game {
         }
     }
 
-    public void reset(int gameState){
-        if (gameState == 0){
+    public void reset(){
+        if (gameState == 0 || gameState == 2){
             pacmanMap.replaceAllPellet();
         }
         if (lives == 0){
             resetLives();
-            clearScore();
+
             this.gameState = 3;
             return;
         }
-        resetPlayer();
-        resetGhost();
-        this.gameState = gameState;
         setAllGhostState(0);
     }
 
@@ -158,7 +158,10 @@ public class Game {
         updateGhost(pinky);
 
         if(pacmanMap.checkPelletOnMap()) {
-            reset(2);
+            this.gameState = 2;
+        }
+        if(gameState == 2 || gameState == 4){
+            reset();
         }
     }
 
@@ -389,7 +392,7 @@ public class Game {
         Entity check = PowerPelletState.checkCollision(player, ghost, this);
         if(check == player){
             reduceLive();
-            reset(4);
+            this.gameState = 4;
         } else if (check == ghost) {
             score += 200;
             ghostAI.get(ghost).setState(2);

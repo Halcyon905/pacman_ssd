@@ -7,9 +7,12 @@ import java.awt.event.ActionListener;
 
 public class GameOver  extends JPanel {
     private JPanel titlePanel;
+    private JPanel scorePanel;
     private JPanel buttonPanel;
+    private JLabel score;
     private JButton menu;
     private JButton exit;
+
     public GameOver(int width, int height) {
         setBackground(Color.BLACK);
         setLayout(new BorderLayout());
@@ -24,6 +27,16 @@ public class GameOver  extends JPanel {
         title.setFont(new Font("TimesRoman", Font.PLAIN, 30));
         title.setForeground(Color.white);
         titlePanel.add(title);
+
+        scorePanel = new JPanel();
+        scorePanel.setPreferredSize(new Dimension(width, height/4));
+        scorePanel.setLayout(new FlowLayout());
+        scorePanel.setBackground(Color.BLACK);
+
+        score = new JLabel();
+        score.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+        score.setForeground(Color.white);
+        scorePanel.add(score);
 
         buttonPanel = new JPanel();
         buttonPanel.setPreferredSize(new Dimension(width, height/4));
@@ -53,7 +66,12 @@ public class GameOver  extends JPanel {
         buttonPanel.add(exit);
 
         add(titlePanel, BorderLayout.NORTH);
+        add(scorePanel, BorderLayout.AFTER_LAST_LINE);
         add(buttonPanel, BorderLayout.CENTER);
+    }
+
+    public void playerScore(int score) {
+        this.score.setText("Score: " + score);
     }
 
 }

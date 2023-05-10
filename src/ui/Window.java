@@ -65,6 +65,8 @@ public class Window extends JFrame {
     }
 
     public void loadGameOver() {
+        gameOver.playerScore(gameGUI.game.getScore());
+        gameGUI.game.clearScore();
         remove(gameGUI);
         validate();
 
@@ -106,6 +108,17 @@ public class Window extends JFrame {
                     repaint();
                     if(gameGUI.game.getGameState() == 3) {
                         GameState.state = GameState.GAMEOVER;
+                        break;
+                    } else if (gameGUI.game.getGameState() == 2 || gameGUI.game.getGameState() == 4) {
+                        gameGUI.game.start();
+                        for(int i = 3; i > 0; i--) {
+                            try {
+                                gameGUI.playerInfo.updateScore(i);
+                                sleep(1000);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                     }
                     try {
                         sleep(42);
