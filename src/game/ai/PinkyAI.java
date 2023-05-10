@@ -40,7 +40,7 @@ public class PinkyAI extends AI{
     }
 
     @Override
-    public String getNextMove(Entity ghost, Entity pacman, Game game) {
+    public String moveAI(Entity ghost, Entity pacman, Game game) {
         int ghostCol = (int) (ghost.getPositionX() / game.getCellSize());
         int ghostRow = (int) (ghost.getPositionY() / game.getCellSize());
         int targetCol = power.get(currentTarget).get(1);

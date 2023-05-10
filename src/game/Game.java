@@ -8,23 +8,22 @@ import java.util.HashMap;
 public class Game {
     private static int CELL_SIZE;
 
-    private Map pacmanMap;
-    private Entity player;
-    private Entity blinky;
-    private Entity inky;
-    private Entity clyde;
-    private Entity pinky;
-    private HashMap<Entity, AI> ghostAI = new HashMap<Entity, AI>();
+    private final Map pacmanMap;
+    private final Entity player;
+    private final Entity blinky;
+    private final Entity inky;
+    private final Entity clyde;
+    private final Entity pinky;
+    private final HashMap<Entity, AI> ghostAI = new HashMap<>();
     private int mapSelected = 0;
-    private int mapHeight = 61;
-    private int mapWidth = 55;
+    private final int mapHeight = 61;
+    private final int mapWidth = 55;
     private int lives = 3;
     private int score = 0;
     private int gameState = 0;
-    private int startX = 26;
-    private int startY = 45;
-    private int base_speed = 4;
-    private int ghost_base_speed = 3;
+    private final int startX = 26;
+    private final int startY = 45;
+    private final int ghost_base_speed = 3;
     private double powerPelletTimer = 0;
 
     public Game(int cellSize) {
@@ -100,7 +99,7 @@ public class Game {
 
     public void resetGhost() {
         switch (mapSelected) {
-            case 1: {
+            case 1, 3: {
                 blinky.headWest(26 * CELL_SIZE, 21 * CELL_SIZE);
                 inky.headEast(22 * CELL_SIZE, 26 * CELL_SIZE);
                 pinky.headEast(26 * CELL_SIZE, 26 * CELL_SIZE);
@@ -112,13 +111,6 @@ public class Game {
                 inky.headEast(22 * CELL_SIZE, 2 * CELL_SIZE);
                 pinky.headEast(26 * CELL_SIZE, 2 * CELL_SIZE);
                 clyde.headWest(30 * CELL_SIZE, 2 * CELL_SIZE);
-                break;
-            }
-            case 3: {
-                blinky.headWest(26 * CELL_SIZE, 19 * CELL_SIZE);
-                inky.headEast(26 * CELL_SIZE, 25 * CELL_SIZE);
-                pinky.headEast(26 * CELL_SIZE, 37 * CELL_SIZE);
-                clyde.headWest(26 * CELL_SIZE, 31 * CELL_SIZE);
                 break;
             }
         }
@@ -137,6 +129,7 @@ public class Game {
         resetPlayer();
         resetGhost();
         this.gameState = gameState;
+        setAllGhostState(0);
     }
 
     public void loadSelectedMap(String filePath, int index) {
@@ -165,7 +158,7 @@ public class Game {
         updateGhost(pinky);
 
         if(pacmanMap.checkPelletOnMap()) {
-            reset(2); //not sure what gameState do punn use 2 here
+            reset(2);
         }
     }
 
@@ -251,8 +244,8 @@ public class Game {
 
         // preventing the ghost from moving through the walls
         if(ghost.getHeading().equals("N")) {
-            int col = (int) (ghost.getPositionX() / CELL_SIZE);
-            int row = (int) ((ghost.getPositionY() - ghost_base_speed) / CELL_SIZE);
+            int col = ghost.getPositionX() / CELL_SIZE;
+            int row = (ghost.getPositionY() - ghost_base_speed) / CELL_SIZE;
             if (!pacmanMap.getCell(row, col).getWall() &&
                     !pacmanMap.getCell(row, col + 2).getWall()) {
                 ghost.move(ghost_base_speed - ghostAI.get(ghost).getSlow());
@@ -260,8 +253,8 @@ public class Game {
             return;
         }
         if(ghost.getHeading().equals("S")) {
-            int col = (int) (ghost.getPositionX() / CELL_SIZE);
-            int row = (int) ((ghost.getPositionY() + (CELL_SIZE * 3)) / CELL_SIZE);
+            int col = ghost.getPositionX() / CELL_SIZE;
+            int row = (ghost.getPositionY() + (CELL_SIZE * 3)) / CELL_SIZE;
             if (!pacmanMap.getCell(row, col).getWall() &&
                     !pacmanMap.getCell(row, col + 2).getWall()) {
                 ghost.move(ghost_base_speed - ghostAI.get(ghost).getSlow());
@@ -269,8 +262,8 @@ public class Game {
             return;
         }
         if(ghost.getHeading().equals("E")) {
-            int col = (int) ((ghost.getPositionX() + (CELL_SIZE * 3)) / CELL_SIZE);
-            int row = (int) (ghost.getPositionY() / CELL_SIZE);
+            int col = (ghost.getPositionX() + (CELL_SIZE * 3)) / CELL_SIZE;
+            int row = ghost.getPositionY() / CELL_SIZE;
             if (!pacmanMap.getCell(row, col).getWall() &&
                     // checking for right edge or right teleporting gate
                     !pacmanMap.getCell(row + 2, col).getWall()) {
@@ -279,8 +272,8 @@ public class Game {
             return;
         }
         if(ghost.getHeading().equals("W")) {
-            int col = (int) ((ghost.getPositionX() - ghost_base_speed) / CELL_SIZE);
-            int row = (int) (ghost.getPositionY() / CELL_SIZE);
+            int col = (ghost.getPositionX() - ghost_base_speed) / CELL_SIZE;
+            int row = ghost.getPositionY() / CELL_SIZE;
             if (!pacmanMap.getCell(row, col).getWall() &&
                     !pacmanMap.getCell(row + 2, col).getWall()) {
                 ghost.move(ghost_base_speed - ghostAI.get(ghost).getSlow());
@@ -290,7 +283,7 @@ public class Game {
 
     public int checkPathYAxisForGhost(Entity ghost) {
         // checks if the ghost is close to a turning point,
-        // where the ghost can change direction from moving horizontally to vertically.
+        // where the ghost can change direction from moving horizontally too vertically.
         int col = ghost.getPositionX() / CELL_SIZE;
         int row = ghost.getPositionY() / CELL_SIZE;
         double TURNING_WINDOW = 3.25;
@@ -310,7 +303,7 @@ public class Game {
 
     public int checkPathXAxisForGhost(Entity ghost) {
         // checks if the ghost is close to a turning point,
-        // where the ghost can change direction from moving vertically to horizontally.
+        // where the ghost can change direction from moving vertically too horizontally.
         int col = ghost.getPositionX() / CELL_SIZE;
         int row = ghost.getPositionY() / CELL_SIZE;
         double TURNING_WINDOW = 3.25;
@@ -353,9 +346,10 @@ public class Game {
             return;
         }
         // preventing the player from moving through the walls
+        int base_speed = 4;
         if(player.getHeading().equals("N")) {
-            int col = (int) (player.getPositionX() / CELL_SIZE);
-            int row = (int) ((player.getPositionY() - base_speed) / CELL_SIZE);
+            int col = player.getPositionX() / CELL_SIZE;
+            int row = (player.getPositionY() - base_speed) / CELL_SIZE;
             if (!pacmanMap.getCell(row, col).getWall() &&
                     !pacmanMap.getCell(row, col + 2).getWall()) {
                 player.move(base_speed);
@@ -363,8 +357,8 @@ public class Game {
             return;
         }
         if(player.getHeading().equals("S")) {
-            int col = (int) (player.getPositionX() / CELL_SIZE);
-            int row = (int) ((player.getPositionY() + (CELL_SIZE * 3)) / CELL_SIZE);
+            int col = player.getPositionX() / CELL_SIZE;
+            int row = (player.getPositionY() + (CELL_SIZE * 3)) / CELL_SIZE;
             if (!pacmanMap.getCell(row, col).getWall() &&
                     !pacmanMap.getCell(row, col + 2).getWall()) {
                 player.move(base_speed);
@@ -372,8 +366,8 @@ public class Game {
             return;
         }
         if(player.getHeading().equals("E")) {
-            int col = (int) ((player.getPositionX() + (CELL_SIZE * 3)) / CELL_SIZE);
-            int row = (int) (player.getPositionY() / CELL_SIZE);
+            int col = (player.getPositionX() + (CELL_SIZE * 3)) / CELL_SIZE;
+            int row = player.getPositionY() / CELL_SIZE;
             if (!pacmanMap.getCell(row, col).getWall() &&
                     // checking for right edge or right teleporting gate
                     !pacmanMap.getCell(row + 2, col).getWall()) {
@@ -382,8 +376,8 @@ public class Game {
             return;
         }
         if(player.getHeading().equals("W")) {
-            int col = (int) ((player.getPositionX() - base_speed) / CELL_SIZE);
-            int row = (int) (player.getPositionY() / CELL_SIZE);
+            int col = (player.getPositionX() - base_speed) / CELL_SIZE;
+            int row = player.getPositionY() / CELL_SIZE;
             if (!pacmanMap.getCell(row, col).getWall() &&
                     !pacmanMap.getCell(row + 2, col).getWall()) {
                 player.move(base_speed);
@@ -394,7 +388,7 @@ public class Game {
     private void checkHit(Entity ghost){
         Entity check = PowerPelletState.checkCollision(player, ghost, this);
         if(check == player){
-            lives--;
+            reduceLive();
             reset(4);
         } else if (check == ghost) {
             score += 200;
