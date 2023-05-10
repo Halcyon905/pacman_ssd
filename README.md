@@ -13,6 +13,21 @@ a feature that allows you to select your
 desired map before the game begins. So, 
 aim for the highest score and enjoy the game!
 
+## Design Patterns Used
+The following design patterns have been implemented in the game:  
+**Strategy Pattern**: We have used the Strategy pattern to create different ghost 
+AI strategies to hunt down the player. Each ghost has a different strategy for 
+movement. This pattern allows us to encapsulate the behavior of the 
+ghosts and switch between them dynamically, depending on the game's state.
+
+**State Pattern**: The State pattern is used to switch between normal and power-up states. 
+When the player eats a power pellet, the ghosts become vulnerable, and the player can eat 
+them for a limited time. This pattern allows us to encapsulate the different states of the 
+game and change the behavior of the entities accordingly.
+
+**Flyweight Pattern**: We have used the Flyweight pattern to load the game's images like ghost efficiently. 
+Instead of loading all the images for each entity separately, we load them once and reuse them 
+throughout the game. This pattern reduces memory usage and improves the game's performance.
 
 ## Prerequisites
 - Java JDK (recommended for version 17)
