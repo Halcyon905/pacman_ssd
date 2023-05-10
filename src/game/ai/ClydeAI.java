@@ -12,7 +12,7 @@ public class ClydeAI extends AI{
     private final String[] direction = {"N", "E", "W", "S"};
 
     @Override
-    public String getNextMove(Entity ghost, Entity pacman, Game game){
+    public String moveAI(Entity ghost, Entity pacman, Game game){
         int col = ghost.getPositionX() / game.getCellSize();
         int row = ghost.getPositionY() / game.getCellSize();
         if(col != oldCol || row != oldRow){

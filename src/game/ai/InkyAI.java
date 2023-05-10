@@ -30,7 +30,7 @@ public class InkyAI extends AI{
     }
 
     @Override
-    public String getNextMove(Entity ghost, Entity pacman, Game game) {
+    public String moveAI(Entity ghost, Entity pacman, Game game) {
 
         if (updateCounter % targetChangeInterval == 0) {
             currentTarget = chooseNewTarget(game);
