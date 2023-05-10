@@ -15,13 +15,13 @@ public class GameOver  extends JPanel {
 
     public GameOver(int width, int height) {
         setBackground(Color.BLACK);
-        setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(width, (int) (height/1.5)));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setPreferredSize(new Dimension(width, height));
 
         titlePanel = new JPanel();
-        titlePanel.setPreferredSize(new Dimension(width, height/4));
         titlePanel.setLayout(new FlowLayout());
         titlePanel.setBackground(Color.BLACK);
+        titlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel title = new JLabel("Game Over");
         title.setFont(new Font("TimesRoman", Font.PLAIN, 30));
@@ -29,9 +29,9 @@ public class GameOver  extends JPanel {
         titlePanel.add(title);
 
         scorePanel = new JPanel();
-        scorePanel.setPreferredSize(new Dimension(width, height/4));
         scorePanel.setLayout(new FlowLayout());
         scorePanel.setBackground(Color.BLACK);
+        scorePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         score = new JLabel();
         score.setFont(new Font("TimesRoman", Font.PLAIN, 30));
@@ -39,8 +39,8 @@ public class GameOver  extends JPanel {
         scorePanel.add(score);
 
         buttonPanel = new JPanel();
-        buttonPanel.setPreferredSize(new Dimension(width, height/4));
         buttonPanel.setBackground(Color.BLACK);
+        buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         menu = new JButton("Main Menu");
         menu.setSize(new Dimension(50, 50));
@@ -65,9 +65,13 @@ public class GameOver  extends JPanel {
         buttonPanel.add(menu);
         buttonPanel.add(exit);
 
-        add(titlePanel, BorderLayout.NORTH);
-        add(scorePanel, BorderLayout.AFTER_LAST_LINE);
-        add(buttonPanel, BorderLayout.CENTER);
+        add(Box.createRigidArea(new Dimension(0, height/6)));
+        add(titlePanel);
+        add(Box.createRigidArea(new Dimension(0, height/6)));
+        add(scorePanel);
+        add(Box.createRigidArea(new Dimension(0, height/6)));
+        add(buttonPanel);
+        add(Box.createRigidArea(new Dimension(0, height/6)));
     }
 
     public void playerScore(int score) {

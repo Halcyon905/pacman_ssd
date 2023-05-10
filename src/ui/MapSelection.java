@@ -17,14 +17,15 @@ public class MapSelection extends JPanel {
     private Game game;
 
     public MapSelection(int width, int height, Game game) {
-        setLayout(new BorderLayout());
         setBackground(Color.BLACK);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setPreferredSize(new Dimension(width, (int) (height/1.5)));
 
         titlePanel = new JPanel();
         titlePanel.setPreferredSize(new Dimension(width, height/4));
         titlePanel.setLayout(new FlowLayout());
         titlePanel.setBackground(Color.BLACK);
+
 
         JLabel title = new JLabel("Select Map");
         title.setFont(new Font("TimesRoman", Font.PLAIN, 30));
@@ -64,10 +65,10 @@ public class MapSelection extends JPanel {
                 GameState.state = GameState.PLAYING;
             }
         });
-
         buttonPanel.add(firstMap);
         buttonPanel.add(secondMap);
-      buttonPanel.add(thirdMap);
+        buttonPanel.add(thirdMap);
+        add(Box.createRigidArea(new Dimension(0, height/6)));
         add(titlePanel, BorderLayout.NORTH);
         add(buttonPanel, BorderLayout.CENTER);
     }
