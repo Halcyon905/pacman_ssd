@@ -100,7 +100,7 @@ public class Game {
 
     public void resetGhost() {
         switch (mapSelected) {
-            case 1: {
+            case 1, 3: {
                 blinky.headWest(26 * CELL_SIZE, 21 * CELL_SIZE);
                 inky.headEast(22 * CELL_SIZE, 26 * CELL_SIZE);
                 pinky.headEast(26 * CELL_SIZE, 26 * CELL_SIZE);
@@ -112,13 +112,6 @@ public class Game {
                 inky.headEast(22 * CELL_SIZE, 2 * CELL_SIZE);
                 pinky.headEast(26 * CELL_SIZE, 2 * CELL_SIZE);
                 clyde.headWest(30 * CELL_SIZE, 2 * CELL_SIZE);
-                break;
-            }
-            case 3: {
-                blinky.headWest(26 * CELL_SIZE, 19 * CELL_SIZE);
-                inky.headEast(26 * CELL_SIZE, 25 * CELL_SIZE);
-                pinky.headEast(26 * CELL_SIZE, 37 * CELL_SIZE);
-                clyde.headWest(26 * CELL_SIZE, 31 * CELL_SIZE);
                 break;
             }
         }
