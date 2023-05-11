@@ -67,7 +67,7 @@ Once you have the project files, running the game in IntelliJ IDEA is as simple 
 ## Gameplay
 Upon launching the game, click on the "Play" button to proceed. You will then be prompted to select a map of your choice to begin gameplay.
 
-The player assumes control of the character Pacman, whose objective is to navigate through the selected map with the aim of consuming all the pellets. The character's movements can be controlled using the WASD keys on your keyboard, with 'W' for moving up, 'A' for moving left, 'S' for moving down, and 'D' for moving right.
+The player assumes control of the character Pacman, whose objective is to navigate through the selected map with the aim of consuming all the pellets. The character's movements can be controlled using the WASD keys on your keyboard, with 'W' for turn north, 'A' for turn left, 'S' for turn down, and 'D' for turn right.
 
 However, the game also presents challenges in the form of ghosts that roam the map. Contact with these entities results in the loss of a life, thus it is imperative to maintain vigilance and avoid these characters.
 
