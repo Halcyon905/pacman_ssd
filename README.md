@@ -34,12 +34,9 @@ throughout the game. This pattern reduces memory usage and improves the game's p
 - Java Swing
 
 ## Installing and Running the Game
-
-Getting this game up and running is a breeze! You've got two options to get the game files: either clone the repository or download it as a ZIP file.
+There are two options to get the game files: either clone the repository or download it as a ZIP file.
 
 ### Cloning the Repository
-
-If you're comfortable using a terminal, here's how you can clone the repository:
 
 1. Fire up your terminal.
 2. Execute the following command to clone this repository into a directory of your choice:
@@ -49,8 +46,6 @@ If you're comfortable using a terminal, here's how you can clone the repository:
     ```
 
 ### Downloading as a ZIP File
-
-If you're not a fan of terminals, no problem! You can download the project as a ZIP file:
 
 1. Head over to the repository page on GitHub: [https://github.com/Halcyon905/pacman_ssd](https://github.com/Halcyon905/pacman_ssd).
 2. Locate the green "Code" button on the right side of the page and give it a click.
@@ -72,7 +67,7 @@ Once you have the project files, running the game in IntelliJ IDEA is as simple 
 ## Gameplay
 Upon launching the game, click on the "Play" button to proceed. You will then be prompted to select a map of your choice to begin gameplay.
 
-The player assumes control of the character Pacman, whose objective is to navigate through the selected map with the aim of consuming all the pellets. The character's movements can be controlled using the WASD keys on your keyboard, with 'W' for moving up, 'A' for moving left, 'S' for moving down, and 'D' for moving right.
+The player assumes control of the character Pacman, whose objective is to navigate through the selected map with the aim of consuming all the pellets. The character's movements can be controlled using the WASD keys on your keyboard, with 'W' for turn north, 'A' for turn left, 'S' for turn down, and 'D' for turn right.
 
 However, the game also presents challenges in the form of ghosts that roam the map. Contact with these entities results in the loss of a life, thus it is imperative to maintain vigilance and avoid these characters.
 
