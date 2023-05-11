@@ -76,8 +76,6 @@ public class Map {
                         cellArray[row][col].setSpawn();
                         spawnRow = row;
                         spawnCol = col;
-                    } else {
-                        cellArray[row][col].setEmpty();
                     }
                     col++;
                 }

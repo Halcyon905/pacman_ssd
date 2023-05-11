@@ -52,31 +52,14 @@ public class Cell {
     public void setPellet() {
         pellet = 1;
         pelletStatus = true;
-        wall = false;
-        turning = false;
-        spawn = false;
     }
 
     public void setPowerPellet() {
         pellet = 2;
         pelletStatus = true;
-        wall = false;
-        turning = false;
-        spawn = false;
     }
 
     public void buildWall() {
         wall = true;
-        pellet = 0;
-        pelletStatus = false;
-        spawn = false;
-    }
-
-    public void setEmpty() {
-        wall = false;
-        turning = false;
-        pelletStatus = false;
-        pellet = 0;
-        spawn = false;
     }
 }

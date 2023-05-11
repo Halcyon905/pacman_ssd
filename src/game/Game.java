@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class Game {
     private static int CELL_SIZE;
 
-    private final Map pacmanMap;
+    private Map pacmanMap;
     private final Entity player;
     private final Entity blinky;
     private final Entity inky;
@@ -30,7 +30,6 @@ public class Game {
     public Game(int cellSize) {
         CELL_SIZE = cellSize;
 
-        pacmanMap = new Map(mapWidth, mapHeight);
         player = new Entity(); //map1: 26, 45 / map2: 27, 29
         blinky = new Entity();
         inky = new Entity();
@@ -133,6 +132,7 @@ public class Game {
     }
 
     public void loadSelectedMap(String filePath, int index) {
+        pacmanMap = new Map(mapWidth, mapHeight);
         pacmanMap.setDefaultMap(filePath);
         mapSelected = index;
     }
