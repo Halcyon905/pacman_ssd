@@ -70,11 +70,18 @@ Once you have the project files, running the game in IntelliJ IDEA is as simple 
 
 
 ## Gameplay
-To play the game, use the WASD keys on your keyboard
-to navigate Pacman through the walls. Eating pellets will 
-increase your score, and eating power pellets will make the ghosts
-vulnerable for a short period. Avoid contact with the ghosts, 
-as they will cause you to lose a life.
+Upon launching the game, click on the "Play" button to proceed. You will then be prompted to select a map of your choice to begin gameplay.
+
+The player assumes control of the character Pacman, whose objective is to navigate through the selected map with the aim of consuming all the pellets. The character's movements can be controlled using the WASD keys on your keyboard, with 'W' for moving up, 'A' for moving left, 'S' for moving down, and 'D' for moving right.
+
+However, the game also presents challenges in the form of ghosts that roam the map. Contact with these entities results in the loss of a life, thus it is imperative to maintain vigilance and avoid these characters.
+
+The consumption of pellets does not merely serve the objective of clearing the map but also contributes towards your overall score. Additionally, there are special power pellets scattered around the map. Consuming a power pellet temporarily makes the ghosts vulnerable, providing an opportunity for Pacman to consume the ghosts for extra points.
+
+## Game Demo
+If you'd like to get a sense of the gameplay before diving in, we've got you covered. We've prepared a demo of the game for you to enjoy. See Pacman in action and get a feel for the different maps available. Click on the link below to watch the game demo on YouTube:  
+**[Watch the Game Demo Here](https://youtu.be/7qwLEeWbusI)**
+
 
 ## Team Members
 
