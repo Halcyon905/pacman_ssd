@@ -29,9 +29,12 @@ public class AI {
 
     public String getNextMove(Entity ghost, Entity pacman, Game game) {
         String nextMove = null;
-        if (state < 2){
+        if (state == 0){
             nextMove = moveAI(ghost, pacman, game);
-        } else if (state == 2) {
+        } else if (state == 1) {
+            nextMove = frightenedMove(ghost, pacman, game);
+        }
+        else if (state == 2) {
             nextMove = backSpawn(ghost, game);
         }
         return nextMove;
@@ -39,6 +42,41 @@ public class AI {
 
     public String moveAI(Entity ghost, Entity pacman, Game game) {
         return null;
+    }
+
+    public String frightenedMove(Entity ghost, Entity pacman, Game game){
+        // Get the current row and column of the ghost and pacman
+        int ghostCol = (int) (ghost.getPositionX() / game.getCellSize());
+        int ghostRow = (int) (ghost.getPositionY() / game.getCellSize());
+        int pacmanCol = (int) (pacman.getPositionX() / game.getCellSize());
+        int pacmanRow = (int) (pacman.getPositionY() / game.getCellSize());
+
+        int rowDiff = Math.abs(pacmanRow - ghostRow);
+        int colDiff = Math.abs(pacmanCol - ghostCol);
+        // when ghost and pacman are near enough, ghost tried to escape
+        if (rowDiff <= 30 && colDiff <= 30) {
+            Random rand = new Random();
+            int targetRow, targetCol;
+            CellNode nextMove;
+            // loop until target cell is far enough and reachable
+            do {
+                targetRow = rand.nextInt(game.getPacmanMap().getHeight());
+                targetCol = rand.nextInt(game.getPacmanMap().getWidth());
+                nextMove = bfs(game.getPacmanMap(), ghostRow, ghostCol, targetRow, targetCol);
+                rowDiff = Math.abs(pacmanRow - targetRow);
+                colDiff = Math.abs(pacmanCol - targetCol);
+            } while ((rowDiff <= 33 && colDiff <= 33) || nextMove == null);
+
+            if (nextMove.row > ghostRow) {
+                return "S";
+            } else if (nextMove.row < ghostRow) {
+                return "N";
+            } else if (nextMove.col > ghostCol) {
+                return "E";
+            } else {
+                return "W";
+            }
+        } return moveAI(ghost, pacman, game);
     }
 
     public String backSpawn(Entity ghost, Game game){
